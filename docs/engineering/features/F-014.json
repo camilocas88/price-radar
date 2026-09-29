@@ -11,12 +11,12 @@
     "Existen pruebas del normalizador para respuestas con envío gratis, envío pago y sin datos."
   ],
   "sdd": false,
-  "status": "claiming",
+  "status": "in_progress",
   "roadmap_note": "Quick win derivado de la revisión de mejoras: ranking honesto de precio total antes de habilitar historial y alertas.",
   "owner": "Claude",
   "ticket": "docs/engineering/tasks/T-014.md",
   "branch": "feature/t-014-ml-item-details",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/4",
   "depends_on": [2],
   "allowed_modules": [
     "docs/engineering/features/F-014.json",
