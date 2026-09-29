@@ -1,0 +1,23 @@
+{
+  "id": 3,
+  "name": "feature_registry",
+  "title": "Backlog y estados compartidos entre agentes",
+  "description": "Registro por feature, listado y validación para coordinar tickets, módulos, PR y estados antes del merge humano.",
+  "plan": "docs/engineering/tasks/T-003.md",
+  "acceptance": [
+    "Los features del roadmap tienen registros JSON independientes y estado visible.",
+    "Un comando lista y valida dueños, dependencias y estados.",
+    "El protocolo distingue done de merged y reserva el merge al humano."
+  ],
+  "sdd": true,
+  "status": "in_progress",
+  "roadmap_note": "Habilita trabajo paralelo sin compartir el mismo archivo de estado ni working tree.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-003.md",
+  "branch": "feature/t-003-feature-registry",
+  "pr": null,
+  "depends_on": [1, 2],
+  "allowed_modules": ["AGENTS.md", "README.md", "package.json", ".github/workflows/ci.yml", "docs/engineering/FEATURES.md", "docs/engineering/features/F-003.json", "docs/engineering/tasks/T-003.md", "scripts/features.mjs", "scripts/features.test.mjs"],
+  "reviewed_by": null,
+  "evidence": []
+}

@@ -1,0 +1,23 @@
+{
+  "id": 13,
+  "name": "store_discovery",
+  "title": "Descubrimiento y moderación de aportes",
+  "description": "Incorporar tiendas públicas y aportes de usuarios mediante fuentes permitidas, con moderación y trazabilidad.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "Cada fuente tiene autorización, origen y política documentados.",
+    "Los aportes requieren revisión antes de aparecer como verificados.",
+    "Se pueden retirar datos o enlaces reportados."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Roadmap 5. No implica scraping de sitios protegidos.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [8, 9],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}

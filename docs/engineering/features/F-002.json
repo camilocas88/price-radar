@@ -1,0 +1,22 @@
+{
+  "id": 2,
+  "name": "mercadolibre_search",
+  "title": "Búsqueda de ofertas de Mercado Libre",
+  "description": "Conector y UI para consultar ofertas mediante la API oficial de Mercado Libre Colombia.",
+  "plan": "docs/engineering/tasks/T-002.md",
+  "acceptance": [
+    "El endpoint normaliza ofertas en COP sin afirmar datos no confirmados.",
+    "La UI distingue resultados reales de la demo y enlaza a la publicación."
+  ],
+  "sdd": true,
+  "status": "merged",
+  "roadmap_note": "Roadmap 2. Código fusionado en PR #1; las consultas reales siguen devolviendo 403 y se investigan en F-004.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-002.md",
+  "branch": "feature/t-002-mercadolibre-api",
+  "pr": "https://github.com/camilocas88/price-radar/pull/1",
+  "depends_on": [1],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": ["PR #1 fusionada en main con commit 5c1be75.", "CI de PR #1 aprobado."]
+}

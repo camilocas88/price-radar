@@ -1,0 +1,23 @@
+{
+  "id": 12,
+  "name": "deployment_operations",
+  "title": "Despliegue, observabilidad y seguridad operacional",
+  "description": "Preparar ambientes, secretos, salud de fuentes, límites y trazas para operar el comparador sin confundir demos con datos reales.",
+  "plan": "README.md#despliegue",
+  "acceptance": [
+    "Preview y producción tienen configuración y secretos separados.",
+    "La salud de cada fuente y los errores externos son observables.",
+    "El despliegue no afirma que una fuente bloqueada esté operativa."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Roadmap 3–5. La primera versión puede planificarse cuando exista una fuente real utilizable.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [4, 6],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}

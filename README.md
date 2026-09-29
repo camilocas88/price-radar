@@ -52,6 +52,8 @@ Los impuestos, conversión y entrega se etiquetan como estimados cuando no está
 
 Lee [AGENTS.md](AGENTS.md) antes de trabajar. Usar ramas `feature/<ticket>-<resumen>`, Conventional Commits y el ciclo de gates obligatorio.
 
+El [registro de features](docs/engineering/FEATURES.md) coordina el backlog y la asignación entre agentes. Ejecuta `npm run features:list` para ver estados y dueños; `npm run features:check` valida los registros. `done` significa listo para tu merge, mientras que solo el humano fusiona a `main`.
+
 ## Roadmap
 
 1. MVP local y demo vertical.

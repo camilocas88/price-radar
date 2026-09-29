@@ -1,0 +1,23 @@
+{
+  "id": 10,
+  "name": "price_alerts",
+  "title": "Historial, alertas reales y actualización programada",
+  "description": "Permitir seguimientos persistentes y avisos basados en observaciones nuevas, con sincronización acotada a fuentes autorizadas.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "Una alerta pertenece a una cuenta y evita notificaciones duplicadas.",
+    "El historial distingue precio publicado y costo total estimado.",
+    "El job programado tiene autorización, límites y registros de error."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Roadmap 3. Depende de persistencia y cuentas.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [6, 9],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}
