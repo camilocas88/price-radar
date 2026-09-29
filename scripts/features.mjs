@@ -50,7 +50,7 @@ export function validateFeatures(records, root = projectRoot) {
       if (!data.owner || !data.ticket || !/^feature\/t-\d{3}-/.test(data.branch ?? "")) errors.push(`${label}: feature activo requiere owner, ticket y rama feature/t-###-*`);
       if (!Array.isArray(data.allowed_modules) || data.allowed_modules.length === 0) errors.push(`${label}: feature activo requiere allowed_modules`);
       for (const modulePath of Array.isArray(data.allowed_modules) ? data.allowed_modules : []) {
-        if (typeof modulePath !== "string" || !modulePath.trim()) { errors.push(`${label}: allowed_modules contiene un valor inválido`); continue; }
+        if (typeof modulePath !== "string" || !modulePath.trim() || /[*?]/.test(modulePath)) { errors.push(`${label}: allowed_modules requiere rutas exactas sin comodines`); continue; }
         const previous = ownersByModule.get(modulePath);
         if (previous && previous !== data.id) errors.push(`${label}: módulo ${modulePath} ya está reclamado por F-${String(previous).padStart(3, "0")}`);
         ownersByModule.set(modulePath, data.id);

@@ -10,14 +10,21 @@
     "El protocolo distingue done de merged y reserva el merge al humano."
   ],
   "sdd": true,
-  "status": "in_progress",
+  "status": "in_review",
   "roadmap_note": "Habilita trabajo paralelo sin compartir el mismo archivo de estado ni working tree.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-003.md",
   "branch": "feature/t-003-feature-registry",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/2",
   "depends_on": [1, 2],
   "allowed_modules": ["AGENTS.md", "README.md", "package.json", ".github/workflows/ci.yml", "docs/engineering/FEATURES.md", "docs/engineering/features/F-003.json", "docs/engineering/tasks/T-003.md", "scripts/features.mjs", "scripts/features.test.mjs"],
   "reviewed_by": null,
-  "evidence": []
+  "evidence": [
+    "npm run features:check: 13 registros válidos.",
+    "npm run features:test: 4 pruebas aprobadas.",
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 5 pruebas aprobadas.",
+    "npm run build: correcto."
+  ]
 }

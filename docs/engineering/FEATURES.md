@@ -19,7 +19,7 @@ El backlog vive en un archivo por feature: [`features/F-###.json`](features/). A
 
 1. Actualiza `main` desde `origin/main` y consulta `npm run features:list`, los tickets y las PR abiertas (`gh pr list`). Un feature reclamado en una PR aún no aparecerá en `main` hasta el merge.
 2. Reclama solo un feature `pending`. Crea `T-###`, una rama `feature/t-###-resumen` y cambia **su único JSON** a `in_progress` con `owner`, `ticket`, `branch` y `allowed_modules`. Publica la rama y abre una **draft PR de reclamo** de inmediato; el título debe incluir `F-###` y `T-###` para que los demás agentes vean la asignación remota.
-3. No trabajes sobre módulos de otro feature activo. Si un contrato compartido debe cambiar, acuerda ese contrato en los tickets antes de editarlo. Usa un worktree o checkout aislado por agente; nunca compartas el mismo working tree entre agentes simultáneos.
+3. No trabajes sobre módulos de otro feature activo. Enumera rutas exactas en `allowed_modules` para que el validador detecte reclamaciones duplicadas. Si un contrato compartido debe cambiar, acuerda ese contrato en los tickets antes de editarlo. Usa un worktree o checkout aislado por agente; nunca compartas el mismo working tree entre agentes simultáneos.
 4. Mantén ticket y JSON al día. Si un bloqueo impide avanzar, usa `blocked` y explica condición y siguiente paso. Al reanudar, vuelve a `in_progress`.
 5. Tras implementar y pasar los cuatro gates, cambia a `in_review`. Cuando otro agente revise los cambios de interfaz/dominio, deje evidencia y el handoff esté completo, cambia a `done` en la PR. Solo el humano fusiona a `main`, tras lo cual actualiza el feature a `merged` en un cambio posterior o dentro de la PR antes del merge si el merge ya está confirmado por el humano.
 
