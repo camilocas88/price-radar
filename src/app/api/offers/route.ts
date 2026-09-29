@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { normalizeMercadoLibreOffers, type MercadoLibreSearchResponse } from "@/lib/mercadolibre";
+import { normalizeMercadoLibreOffers, type MercadoLibreSearchResponse } from "../../../lib/mercadolibre";
 
 const MAX_QUERY_LENGTH = 120;
 
@@ -16,12 +16,23 @@ export async function GET(request: NextRequest) {
     const accessToken = process.env.MERCADOLIBRE_ACCESS_TOKEN;
     const response = await fetch(url, {
       headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
-    if (!response.ok) return NextResponse.json({ error: "Mercado Libre no respondió la búsqueda." }, { status: 502 });
+    if (response.status === 401 || response.status === 403) {
+      return NextResponse.json({ error: "La búsqueda de Mercado Libre no está autorizada en este momento.", code: "SOURCE_FORBIDDEN", source: "mercadolibre" }, { status: 503 });
+    }
+    if (response.status === 429) {
+      return NextResponse.json({ error: "Mercado Libre limitó temporalmente las consultas.", code: "SOURCE_RATE_LIMITED", source: "mercadolibre" }, { status: 503 });
+    }
+    if (!response.ok) {
+      return NextResponse.json({ error: "Mercado Libre no respondió la búsqueda.", code: "SOURCE_UNAVAILABLE", source: "mercadolibre" }, { status: 502 });
+    }
     const payload = (await response.json()) as MercadoLibreSearchResponse;
+    if (!Array.isArray(payload?.results)) {
+      return NextResponse.json({ error: "Mercado Libre devolvió una respuesta inesperada.", code: "SOURCE_UNAVAILABLE", source: "mercadolibre" }, { status: 502 });
+    }
     return NextResponse.json({ offers: normalizeMercadoLibreOffers(payload), source: "mercadolibre" });
   } catch {
-    return NextResponse.json({ error: "No fue posible consultar Mercado Libre." }, { status: 502 });
+    return NextResponse.json({ error: "No fue posible consultar Mercado Libre.", code: "SOURCE_UNAVAILABLE", source: "mercadolibre" }, { status: 502 });
   }
 }
