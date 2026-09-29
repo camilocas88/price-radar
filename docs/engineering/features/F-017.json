@@ -1,0 +1,24 @@
+{
+  "id": 17,
+  "name": "sources_health_endpoint",
+  "title": "Endpoint /api/health/sources por conector",
+  "description": "Exponer un endpoint JSON que devuelve el estado de cada conector configurado (Mercado Libre y futuros), reportando ok/degraded/down, latencia de la última consulta y timestamp. Sirve como base para la landing con badges de salud y para monitoreo externo.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "GET /api/health/sources responde 200 con un arreglo de {source, status, latencyMs, checkedAt}.",
+    "Cada conector expone un check ligero (ping/search de bajo costo) reutilizable desde tests.",
+    "Errores del check no rompen el endpoint: el conector aparece como down con el mensaje resumido.",
+    "Existe prueba unitaria del check de Mercado Libre con fetch mockeado."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Quick win derivado de la revisión de mejoras; anticipa parte de F-012 (observabilidad) sin bloquearlo.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [2],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}

@@ -1,0 +1,32 @@
+{
+  "id": 14,
+  "name": "ml_item_details",
+  "title": "Envío e impuestos reales desde Mercado Libre",
+  "description": "El conector de Mercado Libre debe enriquecer cada resultado consultando /items o /shipping cuando la API los exponga, para que el precio total y el flag estimated reflejen envío e impuestos reales en lugar de asumir cero.",
+  "plan": "docs/engineering/tasks/T-014.md",
+  "acceptance": [
+    "Cuando la API expone costo de envío, el conector lo incluye en shipping y no marca estimated por envío.",
+    "Cuando la API expone impuestos, el conector los incluye en taxes; si no, se marca explícitamente como no confirmado.",
+    "El fallo de la llamada de enriquecimiento no rompe la búsqueda: se degrada a los datos previos con estimated=true.",
+    "Existen pruebas del normalizador para respuestas con envío gratis, envío pago y sin datos."
+  ],
+  "sdd": false,
+  "status": "claiming",
+  "roadmap_note": "Quick win derivado de la revisión de mejoras: ranking honesto de precio total antes de habilitar historial y alertas.",
+  "owner": "Claude",
+  "ticket": "docs/engineering/tasks/T-014.md",
+  "branch": "feature/t-014-ml-item-details",
+  "pr": null,
+  "depends_on": [2],
+  "allowed_modules": [
+    "docs/engineering/features/F-014.json",
+    "docs/engineering/features/F-015.json",
+    "docs/engineering/features/F-016.json",
+    "docs/engineering/features/F-017.json",
+    "docs/engineering/tasks/T-014.md",
+    "src/lib/mercadolibre.ts",
+    "src/lib/mercadolibre.test.ts"
+  ],
+  "reviewed_by": null,
+  "evidence": []
+}
