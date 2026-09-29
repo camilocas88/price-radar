@@ -1,0 +1,23 @@
+{
+  "id": 1,
+  "name": "mvp_foundation",
+  "title": "Fundación del MVP y comparador demo",
+  "description": "Base Next.js, dominio de precio y confianza, UI de ejemplo, PostgreSQL preparado y CI.",
+  "plan": "docs/engineering/tasks/T-001.md",
+  "acceptance": [
+    "La UI demo permite explorar ofertas simuladas sin credenciales.",
+    "Lint, typecheck, pruebas y build se ejecutan en CI."
+  ],
+  "sdd": false,
+  "legacy_record": true,
+  "status": "merged",
+  "roadmap_note": "Roadmap 1. Registro histórico previo al protocolo de PR por feature.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-001.md",
+  "branch": "main",
+  "pr": null,
+  "depends_on": [],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": ["Commit 3966b44 en main."]
+}

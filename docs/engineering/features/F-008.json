@@ -1,0 +1,23 @@
+{
+  "id": 8,
+  "name": "compare_link",
+  "title": "Comparar enlaces aportados por usuarios",
+  "description": "Recibir una URL pública, extraer solo datos estructurados permitidos y solicitar al usuario los campos que falten.",
+  "plan": "README.md#arquitectura-y-extensión",
+  "acceptance": [
+    "El endpoint valida URL, dominio y esquema antes de consultar.",
+    "Los datos no confirmados quedan marcados como aportados por usuario.",
+    "No automatiza login ni contenido restringido."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Roadmap 4–5. Alimenta el comparador y la extensión.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [5, 7],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}

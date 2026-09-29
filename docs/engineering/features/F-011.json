@@ -1,0 +1,23 @@
+{
+  "id": 11,
+  "name": "chrome_extension",
+  "title": "Extensión Chrome para comparar la pestaña actual",
+  "description": "Extensión Manifest V3 que envía una URL pública a la API de comparación y abre el resultado sin extraer contenido restringido.",
+  "plan": "README.md#arquitectura-y-extensión",
+  "acceptance": [
+    "La extensión solicita permisos mínimos y opera sobre la pestaña activa.",
+    "La API verifica autenticación y valida la URL recibida.",
+    "La extensión muestra errores de enlace no compatible."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Roadmap 4. Se construye después del flujo de enlaces y cuentas.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [8, 9],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}

@@ -1,0 +1,23 @@
+{
+  "id": 4,
+  "name": "source_access",
+  "title": "Validar fuente real y degradación de búsqueda",
+  "description": "Investigar el 403 de Mercado Libre con autorización permitida, registrar la respuesta real y definir una fuente alternativa autorizada si sigue bloqueada. La UI debe comunicar disponibilidad de la fuente sin fingir resultados.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "Existe evidencia reproducible del acceso a la fuente elegida o del bloqueo externo.",
+    "Los errores de fuente se diferencian de una búsqueda sin resultados.",
+    "No se introduce scraping ni credenciales en el repositorio."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Prioridad inmediata tras T-003; requisito para declarar resultados reales operativos.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [2, 3],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}

@@ -1,0 +1,23 @@
+{
+  "id": 9,
+  "name": "user_accounts",
+  "title": "Cuentas y autenticación",
+  "description": "Identificar a la persona que crea seguimientos y protege recursos privados antes de persistir alertas.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "Las rutas privadas verifican sesión y propietario.",
+    "Secretos y sesiones se configuran fuera del repositorio.",
+    "Pruebas cubren acceso no autorizado."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Roadmap 3. Auth.js es una opción, su versión concreta se decide en el ticket.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [3],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}

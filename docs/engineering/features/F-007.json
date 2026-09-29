@@ -1,0 +1,23 @@
+{
+  "id": 7,
+  "name": "product_matching",
+  "title": "Normalización y equivalencia de productos",
+  "description": "Evitar comparar modelos, capacidades o condiciones diferentes como si fueran el mismo producto.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "Modelo, capacidad y condición forman parte de la identidad comparable.",
+    "Coincidencias ambiguas quedan por verificar.",
+    "Pruebas cubren variantes cercanas pero no equivalentes."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Refina el comparador del MVP antes de sumar fuentes.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [5],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}

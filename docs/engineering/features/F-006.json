@@ -1,0 +1,23 @@
+{
+  "id": 6,
+  "name": "offer_audit",
+  "title": "Persistencia y auditoría de ofertas",
+  "description": "Guardar observaciones de precio, fuente y tiempo para distinguir valores actuales de históricos y detectar cambios con trazabilidad.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "La misma observación no se duplica al sincronizar.",
+    "Cada cambio de precio conserva fuente y fecha.",
+    "La lectura actual y la histórica tienen contratos explícitos."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Roadmap 2–3. Depende del contrato común de ofertas.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [5],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}

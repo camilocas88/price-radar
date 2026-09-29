@@ -1,0 +1,23 @@
+{
+  "id": 5,
+  "name": "offer_contract",
+  "title": "Contrato común de ofertas y conectores",
+  "description": "Definir un modelo de oferta con procedencia, moneda, disponibilidad, confirmación y timestamps que puedan entregar varias APIs o feeds autorizados.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "Los conectores entregan el mismo contrato de oferta validado.",
+    "Los campos desconocidos no se presentan como confirmados.",
+    "Pruebas cubren valores ausentes y monedas diferentes."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Roadmap 2. Puede planificarse en paralelo con F-004 si se acuerda el contrato compartido.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [3],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}
