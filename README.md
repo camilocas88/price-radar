@@ -30,7 +30,8 @@ npm run build
 
 | Fuente | Estado MVP |
 | --- | --- |
-| Mercado Libre, Éxito, Alkosto, Ktronix, Falabella, iShop, Mac Center | Demo/mock |
+| Mercado Libre | API oficial de búsquedas (T-002); configurar `MERCADOLIBRE_ACCESS_TOKEN` si la plataforma lo exige |
+| Éxito, Alkosto, Ktronix, Falabella, iShop, Mac Center | Demo/mock |
 | Amazon, eBay, AliExpress | Demo/mock de importación |
 | Instagram, Facebook, TikTok, WhatsApp | Solo enlace aportado por usuario |
 | APIs, afiliados, feeds autorizados | Pendiente |
