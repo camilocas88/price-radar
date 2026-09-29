@@ -1,4 +1,4 @@
-export type Offer={id:string;store:string;classification:"Mejor compra verificada"|"Importación"|"Posible oferta"|"Precio sospechosamente bajo";price:number;shipping:number;taxes:number;total:number;delivery:string;warranty:string;updated:string;kind:string;confirmation:string;score:number;estimated:boolean};
+import type { Offer } from "@/lib/offers";
 export const demoProduct={name:"iPhone 17 Pro Max",brand:"Apple",storage:"256 GB",color:"Negro titanio",condition:"Nuevo"};
 export const demoOffers:Offer[]=[
 {id:"ml",store:"Mercado Libre",classification:"Mejor compra verificada",price:5889900,shipping:0,taxes:0,total:5889900,delivery:"Llega hoy a Bogotá",warranty:"Garantía local 12 meses",updated:"hace 12 min",kind:"Marketplace",confirmation:"Precio e inventario demo confirmables",score:92,estimated:false},
