@@ -1,9 +1,22 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# Loop de ingeniería
 
-# This is NOT the Next.js you know
+Todo agente (Codex o Claude) sigue este ciclo: **ticket → contrato → implementación → pruebas → revisión → validación → commit → handoff**.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+## Antes de cambiar código
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+1. Crea o reclama un ticket `docs/engineering/tasks/T-###.md` con objetivo, dueño, módulos permitidos y aceptación.
+2. Lee el ticket y los contratos afectados. No modifiques módulos asignados a otro agente.
+3. Trabaja en `feature/<ticket>-<resumen>`; commits Conventional Commits, pequeños y verificables.
 
-<!-- END:nextjs-agent-rules -->
+## Gates obligatorios
+
+- Contrato: tipos/API acordados antes de tocar módulos compartidos.
+- Calidad: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` antes de cerrar.
+- Handoff: dejar evidencia de comandos, resultado, archivos, riesgos y siguiente paso en el ticket.
+- Revisión: otro agente revisa la interfaz y los cambios de dominio antes de fusionar a `main`.
+
+## Propiedad inicial
+
+- Codex: integración, arquitectura, CI, documentación y revisión.
+- Claude: tickets aislados de UI, dominio, datos o pruebas según el ticket.
+- No hay scraping prohibido: solo APIs autorizadas, feeds públicos, datos estructurados o enlaces aportados por usuarios.

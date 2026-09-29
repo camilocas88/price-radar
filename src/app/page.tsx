@@ -1,69 +1,18 @@
-import Image from "next/image";
+"use client";
+import { useMemo, useState } from "react";
+import { Bell as AlertBell, CheckCircle2, ChevronRight, ExternalLink, Search, ShieldCheck, SlidersHorizontal, Sparkles } from "lucide-react";
+import { demoOffers, demoProduct, formatCop } from "@/lib/demo-data";
+const chips = ["Disponible ahora", "Garantía local", "Verificado", "Entrega en Bogotá"];
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+ const [query,setQuery]=useState(demoProduct.name); const [onlyVerified,setOnlyVerified]=useState(false); const [watching,setWatching]=useState(false); const [target,setTarget]=useState("6.000.000");
+ const offers=useMemo(()=>onlyVerified?demoOffers.filter(o=>o.classification==="Mejor compra verificada"):demoOffers,[onlyVerified]);
+ return <main className="min-h-screen bg-[#f6f8f6] text-[#10251d]">
+  <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8"><a className="flex items-center gap-2 font-semibold" href="#inicio"><span className="grid size-9 place-items-center rounded-xl bg-[#14532d] text-lg text-white">R</span>Radar Precio</a><div className="hidden gap-7 text-sm text-[#4b6358] md:flex"><a href="#fuentes">Fuentes</a><a href="#roadmap">Roadmap</a></div><button className="rounded-full bg-[#14532d] px-4 py-2 text-sm font-medium text-white">Entrar al demo</button></nav>
+  <section id="inicio" className="mx-auto max-w-7xl px-5 pb-10 pt-12 lg:px-8 lg:pt-20"><div className="grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end"><div><p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#cce5d4] bg-[#edf8f0] px-3 py-1 text-xs font-semibold text-[#166534]"><Sparkles size={14}/> Radar de compras para Colombia</p><h1 className="max-w-3xl text-5xl font-semibold leading-[.98] tracking-[-.05em] sm:text-6xl">Encuentra la mejor compra. <span className="text-[#197243]">No solo el menor precio.</span></h1><p className="mt-6 max-w-xl text-lg leading-8 text-[#557064]">Comparamos precio real, inventario, entrega, garantía y confianza para que compres con claridad.</p></div><div className="rounded-3xl bg-[#14532d] p-6 text-white shadow-xl shadow-green-950/15"><p className="text-sm text-green-100">Ejemplo listo para explorar</p><p className="mt-2 text-2xl font-medium">iPhone 17 Pro Max</p><div className="mt-5 flex justify-between border-t border-white/15 pt-4 text-sm"><span>Ofertas comparadas</span><b>8</b></div><div className="mt-2 flex justify-between text-sm"><span>Mejor precio real</span><b>COP 5.889.900</b></div></div></div><div className="mt-12 rounded-2xl border border-[#dbe6de] bg-white p-2 shadow-sm"><div className="flex items-center gap-3"><Search className="ml-3 text-[#4e665a]" size={21}/><input aria-label="Buscar producto" value={query} onChange={e=>setQuery(e.target.value)} className="min-w-0 flex-1 bg-transparent py-4 text-base outline-none"/><button className="rounded-xl bg-[#14532d] px-5 py-3 text-sm font-semibold text-white">Buscar</button></div></div><p className="mt-3 text-xs text-[#64796d]">También puedes pegar un enlace de una tienda o publicación pública.</p></section>
+  <section className="border-y border-[#dbe6de] bg-white py-6"><div className="mx-auto flex max-w-7xl flex-wrap gap-x-10 gap-y-3 px-5 text-sm text-[#496156] lg:px-8"><span className="font-medium text-[#14532d]">Compra con contexto</span><span>Precio total estimado</span><span>Confianza explicable</span><span>Alertas sin ruido</span></div></section>
+  <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8"><div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="text-sm font-semibold text-[#197243]">RESULTADOS DEMO</p><h2 className="mt-1 text-3xl font-semibold">{demoProduct.name}</h2><p className="mt-2 text-sm text-[#637a6e]">256 GB · Negro titanio · Nuevo · Bogotá</p></div><button onClick={()=>setWatching(!watching)} className={`inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium ${watching?"border-[#14532d] bg-[#edf8f0] text-[#14532d]":"border-[#cbd9cf] bg-white"}`}><AlertBell size={17}/>{watching?"En seguimiento":"Seguir precio"}</button></div><div className="grid gap-6 lg:grid-cols-[240px_1fr]"><aside className="rounded-2xl border border-[#dbe6de] bg-white p-5"><div className="mb-5 flex gap-2 font-semibold"><SlidersHorizontal size={17}/>Filtros</div><label className="flex cursor-pointer items-center gap-3 text-sm"><input type="checkbox" checked={onlyVerified} onChange={e=>setOnlyVerified(e.target.checked)} className="size-4 accent-[#14532d]"/>Solo verificado</label><div className="mt-6 border-t border-[#e7eee9] pt-5"><p className="text-sm font-medium">Precio objetivo</p><div className="mt-3 flex rounded-lg border border-[#d8e3da] px-3 py-2"><span className="mr-1 text-sm text-[#637a6e]">COP</span><input value={target} onChange={e=>setTarget(e.target.value)} className="w-full text-sm outline-none"/></div><p className="mt-2 text-xs text-[#637a6e]">Te avisaremos al bajar de este valor.</p></div><div className="mt-6 space-y-3 border-t border-[#e7eee9] pt-5 text-sm text-[#496156]">{chips.map(chip=><label key={chip} className="flex items-center gap-3"><input type="checkbox" className="size-4 accent-[#14532d]"/>{chip}</label>)}</div></aside><div className="space-y-3">{offers.map((offer,index)=><article key={offer.id} className={`rounded-2xl border bg-white p-5 ${index===0?"border-[#86c69b] ring-1 ring-[#d6f0dc]":"border-[#dbe6de]"}`}><div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div className="flex gap-4"><div className="grid size-12 shrink-0 place-items-center rounded-xl bg-[#edf8f0] font-semibold text-[#197243]">{offer.store.slice(0,1)}</div><div><div className="flex flex-wrap items-center gap-2"><h3 className="font-semibold">{offer.store}</h3><span className={`rounded-full px-2 py-0.5 text-xs font-medium ${offer.classification==="Mejor compra verificada"?"bg-[#e7f7eb] text-[#197243]":offer.classification==="Precio sospechosamente bajo"?"bg-[#fff1df] text-[#9a4d00]":"bg-[#eef1f5] text-[#52606f]"}`}>{offer.classification}</span></div><p className="mt-1 text-sm text-[#587065]">{offer.delivery} · {offer.warranty} · Actualizado {offer.updated}</p><p className="mt-2 text-xs text-[#6b8175]">{offer.kind} · {offer.confirmation}</p></div></div><div className="sm:text-right"><p className="text-xl font-semibold">{formatCop(offer.total)}</p><p className="mt-1 text-xs text-[#62786c]">Total real {offer.estimated?"estimado":"confirmado"}</p><div className="mt-3 flex items-center gap-2 sm:justify-end"><span className="inline-flex gap-1 text-xs font-semibold text-[#197243]"><ShieldCheck size={14}/>{offer.score}/100</span><a className="inline-flex gap-1 rounded-lg bg-[#14532d] px-3 py-2 text-xs font-semibold text-white" href="#comparar">Ver oferta <ExternalLink size={13}/></a></div></div></div><div className="mt-4 grid grid-cols-2 gap-2 border-t border-[#e7eee9] pt-3 text-xs text-[#60766a] sm:grid-cols-4"><span>Producto: {formatCop(offer.price)}</span><span>Envío: {formatCop(offer.shipping)}</span><span>Impuestos: {formatCop(offer.taxes)}</span><span>{offer.estimated?"Incluye estimaciones":"Datos confirmados"}</span></div></article>)}</div></div></section>
+  <section id="comparar" className="bg-[#10251d] py-16 text-white"><div className="mx-auto grid max-w-7xl gap-10 px-5 lg:grid-cols-2 lg:px-8"><div><p className="text-sm font-semibold text-[#91e1aa]">COMPARAR ESTE ENLACE</p><h2 className="mt-2 text-3xl font-semibold">¿Viste una oferta por fuera?</h2><p className="mt-4 max-w-md leading-7 text-[#bed0c4]">Pega su URL. Si no tiene datos públicos suficientes, te pediremos precio, condición y ciudad. Será marcada como aportada por usuario.</p></div><div className="rounded-2xl bg-white p-5 text-[#10251d]"><input placeholder="https://tienda.com/producto o enlace público" className="w-full rounded-lg border border-[#d9e3dc] px-4 py-3 text-sm outline-none"/><button className="mt-3 inline-flex gap-1 rounded-lg bg-[#14532d] px-4 py-3 text-sm font-semibold text-white">Comparar enlace <ChevronRight size={16}/></button><p className="mt-3 text-xs text-[#637a6e]">Sin login ni extracción de contenido restringido.</p></div></div></section>
+  <section id="fuentes" className="mx-auto max-w-7xl px-5 py-14 lg:px-8"><div className="grid gap-4 md:grid-cols-3"><Info title="Verificado" icon={<CheckCircle2/>} text="Datos demostrables de precio, inventario y checkout. En el MVP, datos demo."/><Info title="Por verificar" icon={<Search/>} text="Enlace público aportado por una persona con información incompleta."/><Info title="Importación" icon={<ShieldCheck/>} text="Conversión, envío e impuestos claramente estimados o confirmados."/></div></section><footer id="roadmap" className="border-t border-[#dbe6de] px-5 py-8 text-center text-xs text-[#637a6e]">Radar Precio · Demo local con fuentes simuladas · Colombia</footer></main>;
 }
+function Info({title,text,icon}:{title:string;text:string;icon:React.ReactNode}) { return <div className="rounded-2xl border border-[#dbe6de] bg-white p-6"><div className="mb-5 text-[#197243]">{icon}</div><h3 className="font-semibold">{title}</h3><p className="mt-2 text-sm leading-6 text-[#637a6e]">{text}</p></div>; }

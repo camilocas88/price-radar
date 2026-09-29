@@ -1,0 +1,2 @@
+export type PriceInput={amount:number;currency:string;shipping?:number;taxes?:number;exchangeRate?:number;confirmed?:Partial<Record<"amount"|"shipping"|"taxes"|"exchangeRate",boolean>>};
+export function calculateRealPrice(input:PriceInput){const rate=input.currency==="COP"?1:(input.exchangeRate??0);const product=input.amount*rate;const shipping=input.shipping??0;const taxes=input.taxes??0;return {product,shipping,taxes,total:product+shipping+taxes,estimated:Object.values(input.confirmed??{}).some(v=>v===false)||input.currency!=="COP"&&!input.exchangeRate};}

@@ -1,0 +1,2 @@
+export type TrustInput={reputation:number;protectedPayment:boolean;localWarranty:boolean;checkout:boolean;atypicalPrice:boolean;complete:boolean;reviews:boolean};
+export function trustScore(input:TrustInput){let score=input.reputation;score+=input.protectedPayment?12:0;score+=input.localWarranty?10:0;score+=input.checkout?8:0;score+=input.reviews?5:0;score+=input.complete?5:-15;score+=input.atypicalPrice?-25:0;return Math.max(0,Math.min(100,score));}

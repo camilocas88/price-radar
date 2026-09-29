@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Radar Precio
 
-## Getting Started
+Radar de compras para Colombia. El MVP compara ofertas demo de un iPhone por precio real, disponibilidad y confianza. **No contiene integraciones comerciales reales ni scraping.**
 
-First, run the development server:
+## Ejecutar localmente
 
 ```bash
+git clone <tu-repo>
+cd radar-precio
+npm install
+cp .env.example .env
+docker compose up -d
+npm run db:generate
+npm run db:push
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre `http://localhost:3000`. La UI funciona sin credenciales con datos demo; PostgreSQL queda listo para persistencia posterior.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Validación
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
 
-## Learn More
+## Estado de fuentes
 
-To learn more about Next.js, take a look at the following resources:
+| Fuente | Estado MVP |
+| --- | --- |
+| Mercado Libre, Éxito, Alkosto, Ktronix, Falabella, iShop, Mac Center | Demo/mock |
+| Amazon, eBay, AliExpress | Demo/mock de importación |
+| Instagram, Facebook, TikTok, WhatsApp | Solo enlace aportado por usuario |
+| APIs, afiliados, feeds autorizados | Pendiente |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Los impuestos, conversión y entrega se etiquetan como estimados cuando no están confirmados. No se debe automatizar login, CAPTCHA, bloqueos o contenido contrario a los términos de una plataforma.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Arquitectura y extensión
 
-## Deploy on Vercel
+`src/lib` contiene normalización, cálculo de precio y score de confianza; los conectores futuros deben entregar el mismo modelo de oferta. Una extensión Chrome Manifest V3 deberá detectar URL/metadata de la pestaña, enviar una solicitud autenticada a una API compartida (`POST /api/compare-link`) y abrir el comparador. La extensión no debe extraer contenido restringido.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Despliegue
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Vercel:** despliegue principal; configurar `DATABASE_URL` y posteriormente `AUTH_SECRET`. Preview para PR y producción para `main`. Actualizaciones programadas: Vercel Cron llamando un endpoint protegido, respetando límites y costos.
+- **GitHub Pages:** únicamente landing/documentación estática; no sirve para API, autenticación, cron ni PostgreSQL. Puede construirse como artefacto estático separado cuando exista repositorio remoto.
+- **Dominio:** en Vercel añadir dominio, crear registro A/CNAME indicado por Vercel y verificar DNS; no comprar ni cambiar DNS sin autorización.
+
+## Colaboración
+
+Lee [AGENTS.md](AGENTS.md) antes de trabajar. Usar ramas `feature/<ticket>-<resumen>`, Conventional Commits y el ciclo de gates obligatorio.
+
+## Roadmap
+
+1. MVP local y demo vertical.
+2. APIs oficiales/afiliados y feeds autorizados; sincronización y auditoría de ofertas.
+3. Auth.js, alertas reales, historial persistente y cron.
+4. Extensión Chrome Manifest V3.
+5. Descubrimiento de tiendas públicas, aportes moderados y revisión de seguridad, cumplimiento y escalabilidad.

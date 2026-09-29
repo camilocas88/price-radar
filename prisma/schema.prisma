@@ -1,0 +1,6 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" }
+
+model Product { id String @id @default(cuid()) name String brand String? model String? offers Offer[] createdAt DateTime @default(now()) }
+model Offer { id String @id @default(cuid()) productId String product Product @relation(fields:[productId],references:[id]) source String classification String price Int shipping Int @default(0) taxes Int @default(0) currency String @default("COP") confidence Int updatedAt DateTime @updatedAt }
+model Watchlist { id String @id @default(cuid()) productId String targetPrice Int userId String @default("demo-user") }
