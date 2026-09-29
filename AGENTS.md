@@ -14,6 +14,8 @@ Todo agente (Codex o Claude) sigue este ciclo: **ticket → contrato → impleme
 - Calidad: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` antes de cerrar.
 - Handoff: dejar evidencia de comandos, resultado, archivos, riesgos y siguiente paso en el ticket.
 - Revisión: otro agente revisa la interfaz y los cambios de dominio antes de fusionar a `main`.
+- PR de handoff: al terminar cada ticket, el agente crea una Pull Request (PR) desde su rama de trabajo, con el ticket, evidencia de los gates, riesgos y siguiente paso enlazados.
+- Autoridad de merge: ningún agente puede aprobar ni fusionar una PR. Solo el humano propietario del repositorio puede hacer merge a `main` después de la revisión requerida.
 
 ## Propiedad inicial
 
