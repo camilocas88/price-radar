@@ -9,6 +9,7 @@
     "La UI distingue resultados reales de la demo y enlaza a la publicación."
   ],
   "sdd": true,
+  "legacy_record": true,
   "status": "merged",
   "roadmap_note": "Roadmap 2. Código fusionado en PR #1; las consultas reales siguen devolviendo 403 y se investigan en F-004.",
   "owner": "Codex",

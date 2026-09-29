@@ -1,11 +1,11 @@
-import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { dirname, join, relative, resolve } from "node:path";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { dirname, join, posix, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const featuresDir = join(projectRoot, "docs/engineering/features");
-const statuses = new Set(["pending", "in_progress", "blocked", "in_review", "done", "merged"]);
-const activeStatuses = new Set(["in_progress", "blocked", "in_review", "done"]);
+const statuses = new Set(["pending", "claiming", "in_progress", "blocked", "in_review", "done", "merged"]);
+const activeStatuses = new Set(["claiming", "in_progress", "blocked", "in_review", "done"]);
 const requiredStrings = ["name", "title", "description", "plan", "roadmap_note"];
 const requiredArrays = ["acceptance", "depends_on", "allowed_modules", "evidence"];
 
@@ -36,6 +36,8 @@ export function validateFeatures(records, root = projectRoot) {
     for (const key of requiredArrays) if (!Array.isArray(data[key])) errors.push(`${label}: ${key} debe ser un arreglo`);
     if (!Array.isArray(data.acceptance) || data.acceptance.length === 0 || data.acceptance.some((item) => typeof item !== "string" || !item.trim())) errors.push(`${label}: acceptance requiere criterios de texto`);
     if (typeof data.sdd !== "boolean") errors.push(`${label}: sdd debe ser booleano`);
+    if (data.legacy_record !== undefined && typeof data.legacy_record !== "boolean") errors.push(`${label}: legacy_record debe ser booleano`);
+    if (data.legacy_record === true && ![1, 2].includes(data.id)) errors.push(`${label}: legacy_record solo aplica a F-001/F-002`);
     if (!statuses.has(data.status)) errors.push(`${label}: status no válido: ${data.status}`);
 
     for (const key of ["owner", "ticket", "branch", "pr", "reviewed_by"]) {
@@ -51,14 +53,19 @@ export function validateFeatures(records, root = projectRoot) {
       if (!Array.isArray(data.allowed_modules) || data.allowed_modules.length === 0) errors.push(`${label}: feature activo requiere allowed_modules`);
       for (const modulePath of Array.isArray(data.allowed_modules) ? data.allowed_modules : []) {
         if (typeof modulePath !== "string" || !modulePath.trim() || /[*?]/.test(modulePath)) { errors.push(`${label}: allowed_modules requiere rutas exactas sin comodines`); continue; }
-        const previous = ownersByModule.get(modulePath);
-        if (previous && previous !== data.id) errors.push(`${label}: módulo ${modulePath} ya está reclamado por F-${String(previous).padStart(3, "0")}`);
-        ownersByModule.set(modulePath, data.id);
+        const canonical = posix.normalize(modulePath);
+        if (canonical !== modulePath || canonical.startsWith("/") || canonical.startsWith("../") || canonical === "." || canonical.endsWith("/") || modulePath.includes("\\")) { errors.push(`${label}: ruta de módulo no canónica: ${modulePath}`); continue; }
+        if (existsSync(join(root, canonical)) && statSync(join(root, canonical)).isDirectory()) { errors.push(`${label}: allowed_modules requiere archivos, no directorios: ${modulePath}`); continue; }
+        const previous = ownersByModule.get(canonical);
+        if (previous && previous !== data.id) errors.push(`${label}: módulo ${canonical} ya está reclamado por F-${String(previous).padStart(3, "0")}`);
+        if (previous === data.id) errors.push(`${label}: módulo ${canonical} duplicado`);
+        ownersByModule.set(canonical, data.id);
       }
     }
-    if (["in_review", "done"].includes(data.status) && !data.pr) errors.push(`${label}: ${data.status} requiere PR`);
-    if (data.status === "done" && (!data.reviewed_by || data.reviewed_by === data.owner)) errors.push(`${label}: done requiere revisión ajena`);
-    if (["in_review", "done"].includes(data.status)) {
+    if (["in_progress", "blocked", "in_review", "done"].includes(data.status) && !data.pr) errors.push(`${label}: ${data.status} requiere PR`);
+    if (["done", "merged"].includes(data.status) && data.legacy_record !== true && (!data.reviewed_by || data.reviewed_by === data.owner)) errors.push(`${label}: ${data.status} requiere revisión ajena`);
+    if (data.status === "merged" && data.legacy_record !== true && !data.pr) errors.push(`${label}: merged requiere PR`);
+    if (["in_review", "done", "merged"].includes(data.status) && data.legacy_record !== true) {
       for (const gate of ["npm run lint", "npm run typecheck", "npm test", "npm run build"]) {
         if (!Array.isArray(data.evidence) || !data.evidence.some((item) => typeof item === "string" && item.includes(gate))) errors.push(`${label}: ${data.status} requiere evidencia de ${gate}`);
       }

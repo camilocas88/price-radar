@@ -9,6 +9,7 @@
     "Lint, typecheck, pruebas y build se ejecutan en CI."
   ],
   "sdd": false,
+  "legacy_record": true,
   "status": "merged",
   "roadmap_note": "Roadmap 1. Registro histórico previo al protocolo de PR por feature.",
   "owner": "Codex",
