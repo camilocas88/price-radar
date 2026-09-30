@@ -1,0 +1,24 @@
+{
+  "id": 16,
+  "name": "price_snapshot_table",
+  "title": "Tabla PriceSnapshot y persistencia de búsquedas",
+  "description": "Añadir el modelo PriceSnapshot en Prisma (productId, source, price, shipping, taxes, currency, capturedAt) con índices por (productId, capturedAt) y (source, capturedAt), y persistir cada consulta exitosa de /api/offers como primer paso hacia historial y detección de anomalías.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "prisma/schema.prisma incluye PriceSnapshot con los campos e índices definidos.",
+    "npm run db:generate compila los tipos y npm run typecheck no rompe.",
+    "El endpoint /api/offers guarda un snapshot por oferta cuando hay DATABASE_URL disponible, sin fallar la respuesta si la escritura falla.",
+    "Existe una prueba que verifica que el normalizador produce datos serializables coherentes con el esquema."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Quick win derivado de la revisión de mejoras y primer paso hacia F-006 (Persistencia y auditoría) y F-010 (historial y alertas).",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [1, 2],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}
