@@ -5,30 +5,101 @@ import { Bell, ExternalLink, Search, ShieldCheck, SlidersHorizontal, Sparkles } 
 import { demoOffers, demoProduct, formatCop } from "@/lib/demo-data";
 import type { Offer } from "@/lib/offers";
 
+type SearchStatus = "demo" | "loading" | "success" | "unavailable";
+type SearchPayload = { offers?: Offer[]; error?: string; code?: string };
+
 export default function Home() {
   const [query, setQuery] = useState(demoProduct.name);
-  const [liveOffers, setLiveOffers] = useState<Offer[] | null>(null);
+  const [searchedQuery, setSearchedQuery] = useState("");
+  const [liveOffers, setLiveOffers] = useState<Offer[]>([]);
+  const [status, setStatus] = useState<SearchStatus>("demo");
   const [onlyVerified, setOnlyVerified] = useState(false);
   const [watching, setWatching] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const offers = useMemo(() => {
-    const current = liveOffers ?? demoOffers;
+    const current = status === "demo" ? demoOffers : status === "success" ? liveOffers : [];
     return onlyVerified ? current.filter((offer) => offer.classification === "Mejor compra verificada") : current;
-  }, [liveOffers, onlyVerified]);
+  }, [liveOffers, onlyVerified, status]);
+
   async function search() {
-    const term = query.trim(); if (!term) return;
-    setLoading(true); setError("");
-    try { const response = await fetch(`/api/offers?query=${encodeURIComponent(term)}`); const data = await response.json() as { offers?: Offer[]; error?: string }; if (!response.ok) throw new Error(data.error ?? "No fue posible consultar Mercado Libre."); setLiveOffers(data.offers ?? []); }
-    catch (reason) { setError(reason instanceof Error ? reason.message : "No fue posible consultar Mercado Libre."); }
-    finally { setLoading(false); }
+    const term = query.trim();
+    if (!term) return;
+    setSearchedQuery(term);
+    setStatus("loading");
+    setLiveOffers([]);
+    setWatching(false);
+    setError("");
+    try {
+      const response = await fetch(`/api/offers?query=${encodeURIComponent(term)}`);
+      const data = await response.json() as SearchPayload;
+      if (!response.ok) throw new Error(data.error ?? "No fue posible consultar Mercado Libre.");
+      setLiveOffers(data.offers ?? []);
+      setStatus("success");
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "No fue posible consultar Mercado Libre.");
+      setStatus("unavailable");
+    }
   }
-  return <main className="min-h-screen bg-[#f6f8f6] text-[#10251d]"><nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8"><a className="flex items-center gap-2 font-semibold" href="#inicio"><span className="grid size-9 place-items-center rounded-xl bg-[#14532d] text-lg text-white">R</span>Radar Precio</a><span className="text-sm text-[#4b6358]">Colombia · compra con contexto</span></nav>
-    <section id="inicio" className="mx-auto max-w-7xl px-5 pb-12 pt-12 lg:px-8 lg:pt-20"><div className="grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end"><div><p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#cce5d4] bg-[#edf8f0] px-3 py-1 text-xs font-semibold text-[#166534]"><Sparkles size={14} /> Radar de compras para Colombia</p><h1 className="max-w-3xl text-5xl font-semibold leading-[.98] tracking-[-.05em] sm:text-6xl">Encuentra la mejor compra. <span className="text-[#197243]">No solo el menor precio.</span></h1><p className="mt-6 max-w-xl text-lg leading-8 text-[#557064]">Comparamos precio publicado, entrega, garantía y señales de confianza sin ocultar lo que no está confirmado.</p></div><div className="rounded-3xl bg-[#14532d] p-6 text-white shadow-xl shadow-green-950/15"><p className="text-sm text-green-100">{liveOffers ? "Resultados en tiempo real" : "Ejemplo listo para explorar"}</p><p className="mt-2 text-2xl font-medium">{liveOffers ? query : demoProduct.name}</p><div className="mt-5 flex justify-between border-t border-white/15 pt-4 text-sm"><span>Ofertas comparadas</span><b>{offers.length}</b></div><div className="mt-2 flex justify-between text-sm"><span>Fuente</span><b>{liveOffers ? "Mercado Libre" : "Demo"}</b></div></div></div><form onSubmit={(event) => { event.preventDefault(); void search(); }} className="mt-12 rounded-2xl border border-[#dbe6de] bg-white p-2 shadow-sm"><div className="flex items-center gap-3"><Search className="ml-3 text-[#4e665a]" size={21} /><input aria-label="Buscar producto" value={query} onChange={(event) => setQuery(event.target.value)} className="min-w-0 flex-1 bg-transparent py-4 text-base outline-none" /><button disabled={loading} className="rounded-xl bg-[#14532d] px-5 py-3 text-sm font-semibold text-white disabled:opacity-60">{loading ? "Buscando…" : "Buscar"}</button></div></form><p className="mt-3 text-xs text-[#64796d]">Búsqueda pública oficial de Mercado Libre Colombia; no se automatizan logins ni se extrae HTML.</p>{error && <p role="alert" className="mt-3 text-sm text-red-700">{error}</p>}</section>
+
+  const isDemo = status === "demo";
+  const isLive = status === "success";
+  const sourceLabel = isDemo ? "Demo" : isLive ? "Mercado Libre" : status === "loading" ? "Consultando" : "No disponible";
+  const resultLabel = isDemo ? "RESULTADOS DEMO" : isLive ? "MERCADO LIBRE · RESULTADOS EN TIEMPO REAL" : status === "loading" ? "CONSULTANDO MERCADO LIBRE" : "FUENTE NO DISPONIBLE";
+
+  return <main className="min-h-screen bg-[#f6f8f6] text-[#10251d]">
+    <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8">
+      <a className="flex items-center gap-2 font-semibold" href="#inicio"><span className="grid size-9 place-items-center rounded-xl bg-[#14532d] text-lg text-white">R</span>Radar Precio</a>
+      <span className="text-sm text-[#4b6358]">Colombia · compra con contexto</span>
+    </nav>
+
+    <section id="inicio" className="mx-auto max-w-7xl px-5 pb-12 pt-12 lg:px-8 lg:pt-20">
+      <div className="grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
+        <div>
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#cce5d4] bg-[#edf8f0] px-3 py-1 text-xs font-semibold text-[#166534]"><Sparkles size={14} /> Radar de compras para Colombia</p>
+          <h1 className="max-w-3xl text-5xl font-semibold leading-[.98] tracking-[-.05em] sm:text-6xl">Encuentra la mejor compra. <span className="text-[#197243]">No solo el menor precio.</span></h1>
+          <p className="mt-6 max-w-xl text-lg leading-8 text-[#557064]">Comparamos precio publicado, entrega, garantía y señales de confianza sin ocultar lo que no está confirmado.</p>
+        </div>
+        <div className="rounded-3xl bg-[#14532d] p-6 text-white shadow-xl shadow-green-950/15">
+          <p className="text-sm text-green-100">{isDemo ? "Ejemplo listo para explorar" : isLive ? "Resultados en tiempo real" : status === "loading" ? "Consultando fuente oficial" : "Fuente temporalmente no disponible"}</p>
+          <p className="mt-2 text-2xl font-medium">{isDemo ? demoProduct.name : searchedQuery}</p>
+          <div className="mt-5 flex justify-between border-t border-white/15 pt-4 text-sm"><span>Ofertas comparadas</span><b>{offers.length}</b></div>
+          <div className="mt-2 flex justify-between text-sm"><span>Fuente</span><b>{sourceLabel}</b></div>
+        </div>
+      </div>
+      <form onSubmit={(event) => { event.preventDefault(); void search(); }} className="mt-12 rounded-2xl border border-[#dbe6de] bg-white p-2 shadow-sm">
+        <div className="flex items-center gap-3"><Search className="ml-3 text-[#4e665a]" size={21} /><input aria-label="Buscar producto" value={query} onChange={(event) => setQuery(event.target.value)} className="min-w-0 flex-1 bg-transparent py-4 text-base outline-none" /><button disabled={status === "loading"} className="rounded-xl bg-[#14532d] px-5 py-3 text-sm font-semibold text-white disabled:opacity-60">{status === "loading" ? "Buscando…" : "Buscar"}</button></div>
+      </form>
+      <p className="mt-3 text-xs text-[#64796d]">Búsqueda mediante la API oficial de Mercado Libre Colombia, sujeta a autorización y disponibilidad; no se automatizan logins ni se extrae HTML.</p>
+      {error && <p role="alert" className="mt-3 text-sm text-red-700">Fuente no disponible: {error} No se muestran ofertas demo como respuesta a esta búsqueda.</p>}
+    </section>
+
     <section className="border-y border-[#dbe6de] bg-white py-6"><div className="mx-auto flex max-w-7xl flex-wrap gap-x-10 gap-y-3 px-5 text-sm text-[#496156] lg:px-8"><span className="font-medium text-[#14532d]">Precio publicado transparente</span><span>Disponibilidad referencial</span><span>Señales de confianza explicables</span></div></section>
-    <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8"><div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="text-sm font-semibold text-[#197243]">{liveOffers ? "MERCADO LIBRE · RESULTADOS EN TIEMPO REAL" : "RESULTADOS DEMO"}</p><h2 className="mt-1 text-3xl font-semibold">{liveOffers ? query : demoProduct.name}</h2><p className="mt-2 max-w-2xl text-sm text-[#637a6e]">{liveOffers ? "El precio es publicado. Envío, garantía y disponibilidad solo se afirman cuando la API los expone." : "256 GB · Negro titanio · Nuevo · Bogotá"}</p></div><button onClick={() => setWatching(!watching)} className={`inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium ${watching ? "border-[#14532d] bg-[#edf8f0] text-[#14532d]" : "border-[#cbd9cf] bg-white"}`}><Bell size={17} />{watching ? "En seguimiento" : "Seguir precio"}</button></div><div className="grid gap-6 lg:grid-cols-[240px_1fr]"><aside className="rounded-2xl border border-[#dbe6de] bg-white p-5"><div className="mb-5 flex gap-2 font-semibold"><SlidersHorizontal size={17} />Filtros</div><label className="flex cursor-pointer items-center gap-3 text-sm"><input type="checkbox" checked={onlyVerified} onChange={(event) => setOnlyVerified(event.target.checked)} className="size-4 accent-[#14532d]" />Solo tienda oficial</label><p className="mt-6 border-t border-[#e7eee9] pt-5 text-xs leading-5 text-[#637a6e]">Una tienda oficial es una señal, no una garantía de entrega.</p></aside><div className="space-y-3">{liveOffers && offers.length === 0 ? <p className="rounded-2xl border border-[#dbe6de] bg-white p-5 text-sm text-[#637a6e]">No encontramos ofertas con precio en COP para esta búsqueda.</p> : offers.map((offer, index) => <OfferCard key={offer.id} offer={offer} highlighted={index === 0} />)}</div></div></section><footer className="border-t border-[#dbe6de] px-5 py-8 text-center text-xs text-[#637a6e]">Radar Precio · Mercado Libre mediante API pública oficial · Colombia</footer></main>;
+
+    <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+      <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div>
+          <p className="text-sm font-semibold text-[#197243]">{resultLabel}</p>
+          <h2 className="mt-1 text-3xl font-semibold">{isDemo ? demoProduct.name : searchedQuery}</h2>
+          <p className="mt-2 max-w-2xl text-sm text-[#637a6e]">{isDemo ? "256 GB · Negro titanio · Nuevo · Bogotá" : isLive ? "El precio es publicado. Envío, garantía y disponibilidad solo se afirman cuando la API los expone." : status === "loading" ? "Esperando respuesta de la fuente oficial." : "Mercado Libre no respondió con ofertas utilizables; vuelve a intentar cuando la fuente esté disponible."}</p>
+        </div>
+        <button disabled={!isLive} onClick={() => setWatching(!watching)} className={`inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 ${watching ? "border-[#14532d] bg-[#edf8f0] text-[#14532d]" : "border-[#cbd9cf] bg-white"}`}><Bell size={17} />{watching ? "En seguimiento" : "Seguir precio"}</button>
+      </div>
+      <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
+        <aside className="rounded-2xl border border-[#dbe6de] bg-white p-5"><div className="mb-5 flex gap-2 font-semibold"><SlidersHorizontal size={17} />Filtros</div><label className="flex cursor-pointer items-center gap-3 text-sm"><input type="checkbox" checked={onlyVerified} onChange={(event) => setOnlyVerified(event.target.checked)} className="size-4 accent-[#14532d]" />Solo tienda oficial</label><p className="mt-6 border-t border-[#e7eee9] pt-5 text-xs leading-5 text-[#637a6e]">Una tienda oficial es una señal, no una garantía de entrega.</p></aside>
+        <div className="space-y-3">
+          {isLive && offers.length === 0 && <p className="rounded-2xl border border-[#dbe6de] bg-white p-5 text-sm text-[#637a6e]">No encontramos ofertas con precio en COP para esta búsqueda.</p>}
+          {status === "unavailable" && <p className="rounded-2xl border border-[#dbe6de] bg-white p-5 text-sm text-[#637a6e]">La fuente no está disponible. No hay resultados reales para mostrar ahora.</p>}
+          {offers.map((offer, index) => <OfferCard key={offer.id} offer={offer} highlighted={index === 0} />)}
+        </div>
+      </div>
+    </section>
+    <footer className="border-t border-[#dbe6de] px-5 py-8 text-center text-xs text-[#637a6e]">Radar Precio · Mercado Libre mediante API oficial · Colombia</footer>
+  </main>;
 }
 
 function OfferCard({ offer, highlighted }: { offer: Offer; highlighted: boolean }) {
-  return <article className={`rounded-2xl border bg-white p-5 ${highlighted ? "border-[#86c69b] ring-1 ring-[#d6f0dc]" : "border-[#dbe6de]"}`}><div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div className="flex gap-4"><div className="grid size-12 shrink-0 place-items-center rounded-xl bg-[#edf8f0] font-semibold text-[#197243]">{offer.store.slice(0, 1)}</div><div><div className="flex flex-wrap items-center gap-2"><h3 className="font-semibold">{offer.store}</h3><span className="rounded-full bg-[#eef1f5] px-2 py-0.5 text-xs font-medium text-[#52606f]">{offer.classification}</span></div><p className="mt-1 text-sm text-[#587065]">{offer.delivery} · {offer.warranty} · {offer.updated}</p><p className="mt-2 text-xs text-[#6b8175]">{offer.kind} · {offer.confirmation}</p></div></div><div className="sm:text-right"><p className="text-xl font-semibold">{formatCop(offer.total)}</p><p className="mt-1 text-xs text-[#62786c]">Precio publicado {offer.estimated ? "con datos pendientes" : "con envío confirmado"}</p><div className="mt-3 flex items-center gap-2 sm:justify-end"><span className="inline-flex gap-1 text-xs font-semibold text-[#197243]"><ShieldCheck size={14} />{offer.score}/100</span><a className="inline-flex gap-1 rounded-lg bg-[#14532d] px-3 py-2 text-xs font-semibold text-white" href={offer.url ?? "#inicio"} target={offer.url ? "_blank" : undefined} rel={offer.url ? "noreferrer" : undefined}>Ver oferta <ExternalLink size={13} /></a></div></div></div><div className="mt-4 grid grid-cols-2 gap-2 border-t border-[#e7eee9] pt-3 text-xs text-[#60766a] sm:grid-cols-4"><span>Producto: {formatCop(offer.price)}</span><span>Envío: {formatCop(offer.shipping)}</span><span>Impuestos: {formatCop(offer.taxes)}</span><span>{offer.estimated ? "Incluye datos por confirmar" : "Datos confirmados"}</span></div></article>;
+  return <article className={`rounded-2xl border bg-white p-5 ${highlighted ? "border-[#86c69b] ring-1 ring-[#d6f0dc]" : "border-[#dbe6de]"}`}>
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div className="flex gap-4"><div className="grid size-12 shrink-0 place-items-center rounded-xl bg-[#edf8f0] font-semibold text-[#197243]">{offer.store.slice(0, 1)}</div><div><div className="flex flex-wrap items-center gap-2"><h3 className="font-semibold">{offer.store}</h3><span className="rounded-full bg-[#eef1f5] px-2 py-0.5 text-xs font-medium text-[#52606f]">{offer.classification}</span></div><p className="mt-1 text-sm text-[#587065]">{offer.delivery} · {offer.warranty} · {offer.updated}</p><p className="mt-2 text-xs text-[#6b8175]">{offer.kind} · {offer.confirmation}</p></div></div><div className="sm:text-right"><p className="text-xl font-semibold">{formatCop(offer.total)}</p><p className="mt-1 text-xs text-[#62786c]">Precio publicado {offer.estimated ? "con datos pendientes" : "con envío confirmado"}</p><div className="mt-3 flex items-center gap-2 sm:justify-end"><span className="inline-flex gap-1 text-xs font-semibold text-[#197243]"><ShieldCheck size={14} />{offer.score}/100</span><a className="inline-flex gap-1 rounded-lg bg-[#14532d] px-3 py-2 text-xs font-semibold text-white" href={offer.url ?? "#inicio"} target={offer.url ? "_blank" : undefined} rel={offer.url ? "noreferrer" : undefined}>Ver oferta <ExternalLink size={13} /></a></div></div></div>
+    <div className="mt-4 grid grid-cols-2 gap-2 border-t border-[#e7eee9] pt-3 text-xs text-[#60766a] sm:grid-cols-4"><span>Producto: {formatCop(offer.price)}</span><span>Envío: {formatCop(offer.shipping)}</span><span>Impuestos: {formatCop(offer.taxes)}</span><span>{offer.estimated ? "Incluye datos por confirmar" : "Datos confirmados"}</span></div>
+  </article>;
 }
