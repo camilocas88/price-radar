@@ -10,12 +10,12 @@
     "Pruebas cubren variantes cercanas pero no equivalentes."
   ],
   "sdd": true,
-  "status": "claiming",
-  "roadmap_note": "Refina el comparador del MVP antes de sumar fuentes.",
+  "status": "blocked",
+  "roadmap_note": "Refina el comparador del MVP antes de sumar fuentes. Bloqueado: F-015 sigue en in_review tras su merge y reserva la UI necesaria para explicar coincidencias ambiguas.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-023.md",
   "branch": "feature/t-023-product-matching",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/13",
   "depends_on": [5],
   "allowed_modules": [
     "docs/engineering/features/F-007.json",
