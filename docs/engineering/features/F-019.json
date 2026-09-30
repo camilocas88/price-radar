@@ -1,0 +1,26 @@
+{
+  "id": 19,
+  "name": "merge_sync_fixture_stability",
+  "title": "Estabilizar prueba del sincronizador tras un merge real",
+  "description": "La prueba de sincronización copia el estado actual de F-004 y presupone que sigue en done. El propio workflow cambia ese archivo a merged antes de ejecutar la prueba, por lo que falla en el primer merge real.",
+  "plan": "docs/engineering/tasks/T-022.md",
+  "acceptance": [
+    "La prueba crea explícitamente un fixture F-004 en done sin depender del estado actual de main.",
+    "El test de sincronización pasa tanto si F-004 está done como si está merged en el repositorio.",
+    "El workflow posterior al merge termina verde y actualiza F-004/F-018 a merged tras la integración humana."
+  ],
+  "sdd": false,
+  "status": "claiming",
+  "roadmap_note": "Corrección urgente de la automatización integrada en PR #8 antes de iniciar otra feature.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-022.md",
+  "branch": "feature/t-022-sync-test-fixture",
+  "pr": null,
+  "depends_on": [18],
+  "allowed_modules": [
+    "docs/engineering/features/F-019.json",
+    "docs/engineering/tasks/T-022.md"
+  ],
+  "reviewed_by": null,
+  "evidence": []
+}
