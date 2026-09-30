@@ -13,7 +13,11 @@ const record = (data, number = data.id) => ({ file: `/tmp/F-${String(number).pad
 test("el backlog real es válido y se puede listar", () => {
   const records = loadFeatures();
   assert.deepEqual(validateFeatures(records), []);
-  assert.match(formatFeatureList(records), /F-004\s+pending/);
+  const list = formatFeatureList(records);
+  for (const { data } of records) {
+    const id = `F-${String(data.id).padStart(3, "0")}`;
+    assert.match(list, new RegExp(`^${id}\\s+${data.status}\\b`, "m"));
+  }
 });
 
 test("rechaza dependencias ausentes y circulares", () => {
