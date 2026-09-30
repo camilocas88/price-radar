@@ -11,7 +11,7 @@
     "Existen pruebas del normalizador para respuestas con envío gratis, envío pago y sin datos."
   ],
   "sdd": false,
-  "status": "in_progress",
+  "status": "in_review",
   "roadmap_note": "Quick win derivado de la revisión de mejoras: ranking honesto de precio total antes de habilitar historial y alertas.",
   "owner": "Claude",
   "ticket": "docs/engineering/tasks/T-014.md",
@@ -25,8 +25,16 @@
     "docs/engineering/features/F-017.json",
     "docs/engineering/tasks/T-014.md",
     "src/lib/mercadolibre.ts",
-    "src/lib/mercadolibre.test.ts"
+    "src/lib/mercadolibre.test.ts",
+    "src/app/api/offers/route.ts",
+    ".env.example"
   ],
   "reviewed_by": null,
-  "evidence": []
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 8 pruebas aprobadas (Vitest).",
+    "npm run build: correcto.",
+    "npm run features:check: 17 registros válidos."
+  ]
 }
