@@ -11,7 +11,7 @@
     "Skeleton visible mientras loading es true; no hay regresiones en accesibilidad ni tests existentes."
   ],
   "sdd": false,
-  "status": "in_progress",
+  "status": "in_review",
   "roadmap_note": "Quick win derivado de la revisión de mejoras: prepara el terreno para SEO, historial de búsquedas y detalle de producto.",
   "owner": "Claude",
   "ticket": "docs/engineering/tasks/T-019.md",
@@ -34,5 +34,11 @@
     "src/app/hooks/useOfferSearch.test.ts"
   ],
   "reviewed_by": null,
-  "evidence": []
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 24 pruebas aprobadas (Vitest, 5 archivos).",
+    "npm run build: correcto; ruta / se genera estática con Suspense.",
+    "npm run features:check: 19 registros válidos."
+  ]
 }
