@@ -11,7 +11,7 @@
     "Existe prueba unitaria del check de Mercado Libre con fetch mockeado."
   ],
   "sdd": true,
-  "status": "in_progress",
+  "status": "in_review",
   "roadmap_note": "Quick win derivado de la revisión de mejoras; anticipa parte de F-012 (observabilidad) sin bloquearlo.",
   "owner": "Claude",
   "ticket": "docs/engineering/tasks/T-020.md",
@@ -26,5 +26,11 @@
     "src/app/api/health/sources/route.ts"
   ],
   "reviewed_by": null,
-  "evidence": []
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 20 pruebas aprobadas (Vitest, 4 archivos).",
+    "npm run build: correcto; /api/health/sources listado como ruta dinámica.",
+    "npm run features:check: 18 registros válidos."
+  ]
 }
