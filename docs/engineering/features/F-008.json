@@ -10,13 +10,16 @@
     "No automatiza login ni contenido restringido."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Roadmap 4–5. Primer flujo de comparación por URL pública aportada por el usuario; extracción JSON-LD acotada y entrada manual cuando falten datos.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-024.md",
   "branch": "feature/t-024-compare-link",
   "pr": "https://github.com/camilocas88/price-radar/pull/14",
-  "depends_on": [5, 7],
+  "depends_on": [
+    5,
+    7
+  ],
   "allowed_modules": [
     "docs/engineering/features/F-008.json",
     "docs/engineering/tasks/T-024.md",
@@ -40,6 +43,7 @@
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas.",
     "review_f008: revisión independiente y segunda pasada del límite de POST sin Content-Length, sin bloqueantes.",
-    "CI PR #14: dos jobs validate aprobados para 87f7206 el 2026-09-30 UTC (53 s y 1m6s)."
+    "CI PR #14: dos jobs validate aprobados para 87f7206 el 2026-09-30 UTC (53 s y 1m6s).",
+    "PR #14 fusionada a main el 2026-09-30T03:04:33Z; merge commit 2327cdc6c0c24e980cd5d126208d8b019f9b6811."
   ]
 }
