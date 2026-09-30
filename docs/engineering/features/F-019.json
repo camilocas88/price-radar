@@ -1,0 +1,40 @@
+{
+  "id": 19,
+  "name": "merge_sync_fixture_stability",
+  "title": "Estabilizar prueba del sincronizador tras un merge real",
+  "description": "La prueba de sincronización copia el estado actual de F-004 y presupone que sigue en done. El propio workflow cambia ese archivo a merged antes de ejecutar la prueba, por lo que falla en el primer merge real.",
+  "plan": "docs/engineering/tasks/T-022.md",
+  "acceptance": [
+    "La prueba crea explícitamente un fixture F-004 en done sin depender del estado actual de main.",
+    "El test de sincronización pasa tanto si F-004 está done como si está merged en el repositorio.",
+    "El workflow posterior al merge termina verde y actualiza F-004/F-018 a merged tras la integración humana."
+  ],
+  "sdd": false,
+  "status": "merged",
+  "roadmap_note": "Corrección urgente de la automatización integrada en PR #8 antes de iniciar otra feature.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-022.md",
+  "branch": "feature/t-022-sync-test-fixture",
+  "pr": "https://github.com/camilocas88/price-radar/pull/10",
+  "depends_on": [
+    18
+  ],
+  "allowed_modules": [
+    "docs/engineering/features/F-019.json",
+    "docs/engineering/tasks/T-022.md",
+    "scripts/sync-merged-features.test.mjs"
+  ],
+  "reviewed_by": "review_t022",
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 20 pruebas aprobadas tras incorporar F-017.",
+    "npm run build: correcto.",
+    "npm run features:check: 19 registros válidos.",
+    "npm run features:test: 6 pruebas aprobadas.",
+    "npm run features:sync:test: 10 pruebas aprobadas con F-004 real en merged, tras incorporar F-017.",
+    "review_t022: revisión independiente sin hallazgos bloqueantes; verificó PR #7/#8 contra GitHub y confirmó que el contrato productivo no cambia.",
+    "CI PR #10 contra main con F-017: dos jobs validate aprobados el 2026-09-30 UTC.",
+    "PR #10 fusionada a main el 2026-09-30T01:45:46Z; merge commit 87f65d625e3b94646f0c9d912cdb50ff7a421367."
+  ]
+}
