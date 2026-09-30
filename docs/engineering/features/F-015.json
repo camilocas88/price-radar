@@ -11,12 +11,12 @@
     "Skeleton visible mientras loading es true; no hay regresiones en accesibilidad ni tests existentes."
   ],
   "sdd": false,
-  "status": "claiming",
+  "status": "in_progress",
   "roadmap_note": "Quick win derivado de la revisión de mejoras: prepara el terreno para SEO, historial de búsquedas y detalle de producto.",
   "owner": "Claude",
   "ticket": "docs/engineering/tasks/T-019.md",
   "branch": "feature/t-019-search-url-components",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/12",
   "depends_on": [1],
   "allowed_modules": [
     "docs/engineering/features/F-015.json",
