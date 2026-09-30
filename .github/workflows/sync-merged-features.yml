@@ -1,0 +1,60 @@
+name: Sync merged feature status
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: sync-merged-features-main
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - name: Verify PR merges and persist feature status
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git switch -C status-sync origin/main
+            node scripts/sync-merged-features.mjs
+            if git diff --quiet -- docs/engineering/features; then
+              echo "No merged feature status to update."
+              exit 0
+            fi
+
+            npm ci
+            npm run features:check
+            npm run features:test
+            npm run features:sync:test
+            npm run lint
+            npm run typecheck
+            npm test
+            npm run build
+
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add docs/engineering/features/F-*.json
+            git commit -m "chore: sync merged feature statuses"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "main avanzó durante el sync (intento ${attempt}/3); reintentando."
+          done
+          echo "No se pudo actualizar main tras tres intentos." >&2
+          exit 1

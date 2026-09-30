@@ -11,12 +11,12 @@
     "La sincronización es idempotente y recupera features done anteriores, incluido F-004."
   ],
   "sdd": true,
-  "status": "claiming",
+  "status": "in_review",
   "roadmap_note": "Mejora del loop de ingeniería: elimina PR de mantenimiento solo para cambiar done a merged.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-018.md",
   "branch": "feature/t-018-merged-status-sync",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/8",
   "depends_on": [3],
   "allowed_modules": [
     "AGENTS.md",
@@ -29,6 +29,15 @@
     "scripts/sync-merged-features.mjs",
     "scripts/sync-merged-features.test.mjs"
   ],
-  "reviewed_by": null,
-  "evidence": []
+  "reviewed_by": "review_t018",
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 14 pruebas aprobadas.",
+    "npm run build: correcto.",
+    "npm run features:check: 18 registros válidos.",
+    "npm run features:test: 6 pruebas aprobadas.",
+    "npm run features:sync:test: 10 pruebas aprobadas.",
+    "review_t018: revisión independiente sin bloqueantes tras corregir verificación de rama/archivo y npm ci por intento."
+  ]
 }

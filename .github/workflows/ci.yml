@@ -13,4 +13,5 @@ jobs:
       - run: npm test
       - run: npm run features:check
       - run: npm run features:test
+      - run: npm run features:sync:test
       - run: npm run build

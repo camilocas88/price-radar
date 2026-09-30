@@ -12,6 +12,7 @@
     "features:list": "node scripts/features.mjs list",
     "features:check": "node scripts/features.mjs check",
     "features:test": "node --test scripts/features.test.mjs",
+    "features:sync:test": "node --test scripts/sync-merged-features.test.mjs",
     "db:generate": "prisma generate",
     "db:push": "prisma db push"
   },
