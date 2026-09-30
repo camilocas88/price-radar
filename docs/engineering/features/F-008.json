@@ -10,7 +10,7 @@
     "No automatiza login ni contenido restringido."
   ],
   "sdd": true,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Roadmap 4–5. Primer flujo de comparación por URL pública aportada por el usuario; extracción JSON-LD acotada y entrada manual cuando falten datos.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-024.md",
@@ -39,6 +39,7 @@
     "npm run features:check: 19 registros válidos.",
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas.",
-    "review_f008: revisión independiente y segunda pasada del límite de POST sin Content-Length, sin bloqueantes."
+    "review_f008: revisión independiente y segunda pasada del límite de POST sin Content-Length, sin bloqueantes.",
+    "CI PR #14: dos jobs validate aprobados para 87f7206 el 2026-09-30 UTC (53 s y 1m6s)."
   ]
 }
