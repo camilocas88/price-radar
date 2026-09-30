@@ -2,6 +2,7 @@
 
 import { useOfferSearch } from "@/app/hooks/useOfferSearch";
 import { Hero } from "./Hero";
+import { CompareLinkSection } from "./CompareLinkSection";
 import { Nav } from "./Nav";
 import { ResultsSection } from "./ResultsSection";
 import { SearchForm } from "./SearchForm";
@@ -39,8 +40,9 @@ export function HomeExperience() {
         onToggleVerified={search.setOnlyVerified}
         onToggleWatching={search.toggleWatching}
       />
+      <CompareLinkSection />
       <footer className="border-t border-[#dbe6de] px-5 py-8 text-center text-xs text-[#637a6e]">
-        Radar Precio · Mercado Libre mediante API oficial · Colombia
+        Radar Precio · Mercado Libre mediante API oficial o enlaces aportados · Colombia
       </footer>
     </main>
   );
