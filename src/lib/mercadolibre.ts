@@ -1,4 +1,4 @@
-import type { Offer } from "./offers";
+import type { OfferContract } from "./offers";
 import { trustScore } from "./trust";
 
 type MercadoLibreResult = {
@@ -33,7 +33,7 @@ export type EnrichmentOptions = {
   timeoutMs?: number;
 };
 
-export function normalizeMercadoLibreOffers(payload: MercadoLibreSearchResponse): Offer[] {
+export function normalizeMercadoLibreOffers(payload: MercadoLibreSearchResponse): OfferContract[] {
   return (payload.results ?? [])
     .filter((item) => item.currency_id === "COP" && Number.isFinite(item.price) && item.price > 0)
     .map((item) => {
@@ -69,8 +69,15 @@ export function normalizeMercadoLibreOffers(payload: MercadoLibreSearchResponse)
           item.condition === "new" ? "nuevo" : item.condition === "used" ? "usado" : null,
         ].filter(Boolean).join(" · "),
         score,
-        estimated: !freeShipping,
+        estimated: true,
         url: item.permalink,
+        source: "mercadolibre",
+        currency: item.currency_id,
+        availability: "unknown" as const,
+        priceConfirmation: "confirmed" as const,
+        shippingConfirmation: freeShipping ? "estimated" as const : "unknown" as const,
+        taxConfirmation: "unknown" as const,
+        checkedAt: new Date().toISOString(),
       };
     });
 }
@@ -107,7 +114,7 @@ export async function fetchMercadoLibreShippingCost(itemId: string, zipCode: str
   return Math.min(...costs);
 }
 
-export async function enrichMercadoLibreOffers(offers: Offer[], options: EnrichmentOptions = {}): Promise<Offer[]> {
+export async function enrichMercadoLibreOffers(offers: OfferContract[], options: EnrichmentOptions = {}): Promise<OfferContract[]> {
   const { timeoutMs = 1500, zipCode } = options;
 
   return Promise.all(offers.map(async (offer) => {
@@ -121,6 +128,7 @@ export async function enrichMercadoLibreOffers(offers: Offer[], options: Enrichm
     }
 
     const confirmedFreeShipping = detail?.shipping?.free_shipping === true;
+    const freeShippingDisproven = detail?.shipping?.free_shipping === false && offer.shippingConfirmation === "estimated";
     const nextShipping = confirmedFreeShipping ? 0 : shippingCost ?? offer.shipping;
     const nextWarranty = typeof detail?.warranty === "string" && detail.warranty.trim() ? detail.warranty.trim() : offer.warranty;
 
@@ -131,12 +139,16 @@ export async function enrichMercadoLibreOffers(offers: Offer[], options: Enrichm
       ? "Envío gratis confirmado por Mercado Libre"
       : typeof shippingCost === "number"
         ? `Envío desde ${new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(shippingCost)}`
+        : freeShippingDisproven
+          ? "Costo y fecha por confirmar"
         : offer.delivery;
 
     const confirmationParts = offer.confirmation.split(" · ").map((part) => {
       if (part === "envío por confirmar" && confirmedFreeShipping) return "envío gratis confirmado";
       if (part === "envío por confirmar" && typeof shippingCost === "number") return "envío con costo confirmado";
       if (part === "envío gratis publicado" && confirmedFreeShipping) return "envío gratis confirmado";
+      if (part === "envío gratis publicado" && typeof shippingCost === "number") return "envío con costo confirmado";
+      if (part === "envío gratis publicado" && freeShippingDisproven) return "envío por confirmar";
       return part;
     });
     if (!taxesConfirmed && !confirmationParts.includes("impuestos por confirmar")) confirmationParts.push("impuestos por confirmar");
@@ -149,6 +161,7 @@ export async function enrichMercadoLibreOffers(offers: Offer[], options: Enrichm
       warranty: nextWarranty,
       confirmation: confirmationParts.join(" · "),
       estimated: !(shippingConfirmed && taxesConfirmed),
+      shippingConfirmation: shippingConfirmed ? "confirmed" as const : freeShippingDisproven ? "unknown" as const : offer.shippingConfirmation,
     };
   }));
 }

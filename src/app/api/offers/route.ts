@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { parseOfferContract } from "../../../lib/offer-contract";
 import {
   enrichMercadoLibreOffers,
   normalizeMercadoLibreOffers,
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Mercado Libre devolvió una respuesta inesperada.", code: "SOURCE_UNAVAILABLE", source: "mercadolibre" }, { status: 502 });
     }
     const baseOffers = normalizeMercadoLibreOffers(payload);
-    const offers = await enrichMercadoLibreOffers(baseOffers, { accessToken, zipCode });
+    const offers = (await enrichMercadoLibreOffers(baseOffers, { accessToken, zipCode })).map(parseOfferContract);
     return NextResponse.json({ offers, source: "mercadolibre" });
   } catch {
     return NextResponse.json({ error: "No fue posible consultar Mercado Libre.", code: "SOURCE_UNAVAILABLE", source: "mercadolibre" }, { status: 502 });

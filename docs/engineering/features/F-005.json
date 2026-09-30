@@ -10,14 +10,35 @@
     "Pruebas cubren valores ausentes y monedas diferentes."
   ],
   "sdd": true,
-  "status": "pending",
+  "status": "done",
   "roadmap_note": "Roadmap 2. Puede planificarse en paralelo con F-004 si se acuerda el contrato compartido.",
-  "owner": null,
-  "ticket": null,
-  "branch": null,
-  "pr": null,
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-021.md",
+  "branch": "feature/t-021-offer-contract",
+  "pr": "https://github.com/camilocas88/price-radar/pull/11",
   "depends_on": [3],
-  "allowed_modules": [],
-  "reviewed_by": null,
-  "evidence": []
+  "allowed_modules": [
+    "docs/engineering/features/F-005.json",
+    "docs/engineering/tasks/T-021.md",
+    "src/lib/offers.ts",
+    "src/lib/offer-contract.ts",
+    "src/lib/offer-contract.test.ts",
+    "src/lib/mercadolibre.ts",
+    "src/lib/mercadolibre.test.ts",
+    "scripts/sync-merged-features.test.mjs",
+    "src/app/api/offers/route.ts",
+    "src/app/api/offers/route.test.ts"
+  ],
+  "reviewed_by": "review_t021",
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 26 pruebas aprobadas.",
+    "npm run build: correcto.",
+    "npm run features:check: 19 registros válidos.",
+    "npm run features:test: 6 pruebas aprobadas.",
+    "npm run features:sync:test: 10 pruebas aprobadas.",
+    "review_t021: hallazgo de envío gratis contradicho por detalle corregido; segunda revisión sin bloqueantes.",
+    "CI PR #11: dos jobs validate aprobados el 2026-09-30 UTC contra main (41 s y 54 s)."
+  ]
 }

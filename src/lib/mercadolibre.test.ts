@@ -9,7 +9,13 @@ describe("normalizeMercadoLibreOffers", () => {
       seller: { nickname: "Tienda oficial", official_store_id: 2 }, seller_address: { city: { name: "Bogotá" } },
     }] });
 
-    expect(offer).toMatchObject({ total: 1200000, shipping: 0, taxes: 0, estimated: false, classification: "Mejor compra verificada" });
+    expect(offer).toMatchObject({
+      total: 1200000, shipping: 0, taxes: 0, estimated: true,
+      classification: "Mejor compra verificada", source: "mercadolibre", currency: "COP",
+      availability: "unknown", priceConfirmation: "confirmed",
+      shippingConfirmation: "estimated", taxConfirmation: "unknown",
+    });
+    expect(new Date(offer.checkedAt).toISOString()).toBe(offer.checkedAt);
     expect(offer.confirmation).toContain("disponibilidad referencial");
   });
 
@@ -44,6 +50,8 @@ describe("enrichMercadoLibreOffers", () => {
     expect(enriched.delivery).toContain("Envío gratis confirmado");
     expect(enriched.confirmation).toContain("impuestos por confirmar");
     expect(enriched.estimated).toBe(true);
+    expect(enriched.shippingConfirmation).toBe("confirmed");
+    expect(enriched.taxConfirmation).toBe("unknown");
   });
 
   it("usa la opción más barata de shipping_options cuando el envío no es gratis", async () => {
@@ -65,6 +73,40 @@ describe("enrichMercadoLibreOffers", () => {
     expect(enriched.delivery).toContain("Envío desde");
     expect(enriched.confirmation).toContain("envío con costo confirmado");
     expect(enriched.estimated).toBe(true);
+    expect(enriched.shippingConfirmation).toBe("confirmed");
+  });
+
+  it("retira el aviso de envío gratis si el detalle lo contradice", async () => {
+    const [publishedFree] = normalizeMercadoLibreOffers({ results: [{
+      id: "MCO43", title: "Teléfono", price: 1_500_000, currency_id: "COP",
+      permalink: "https://example.test/MCO43", shipping: { free_shipping: true },
+    }] });
+    const fetchImpl = vi.fn(async () => new Response(JSON.stringify({ id: "MCO43", shipping: { free_shipping: false } }), { status: 200 }));
+
+    const [enriched] = await enrichMercadoLibreOffers([publishedFree], { fetchImpl: fetchImpl as unknown as typeof fetch });
+
+    expect(enriched.shippingConfirmation).toBe("unknown");
+    expect(enriched.delivery).toBe("Costo y fecha por confirmar");
+    expect(enriched.confirmation).toContain("envío por confirmar");
+    expect(enriched.confirmation).not.toContain("envío gratis publicado");
+    expect(enriched.estimated).toBe(true);
+  });
+
+  it("reemplaza el aviso de envío gratis por el costo confirmado si hay ZIP", async () => {
+    const [publishedFree] = normalizeMercadoLibreOffers({ results: [{
+      id: "MCO44", title: "Teléfono", price: 1_500_000, currency_id: "COP",
+      permalink: "https://example.test/MCO44", shipping: { free_shipping: true },
+    }] });
+    const fetchImpl = vi.fn(async (input: RequestInfo | URL) => String(input).includes("shipping_options")
+      ? new Response(JSON.stringify({ options: [{ cost: 20_000, currency_id: "COP" }] }), { status: 200 })
+      : new Response(JSON.stringify({ id: "MCO44", shipping: { free_shipping: false } }), { status: 200 }));
+
+    const [enriched] = await enrichMercadoLibreOffers([publishedFree], { fetchImpl: fetchImpl as unknown as typeof fetch, zipCode: "110111" });
+
+    expect(enriched.shipping).toBe(20_000);
+    expect(enriched.shippingConfirmation).toBe("confirmed");
+    expect(enriched.confirmation).toContain("envío con costo confirmado");
+    expect(enriched.confirmation).not.toContain("envío gratis publicado");
   });
 
   it("degrada silenciosamente si /items falla y no hay ZIP", async () => {
@@ -76,5 +118,6 @@ describe("enrichMercadoLibreOffers", () => {
     expect(enriched.total).toBe(baseOffer.total);
     expect(enriched.estimated).toBe(true);
     expect(enriched.delivery).toBe(baseOffer.delivery);
+    expect(enriched.shippingConfirmation).toBe("unknown");
   });
 });
