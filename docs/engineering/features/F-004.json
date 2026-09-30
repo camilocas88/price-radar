@@ -10,7 +10,7 @@
     "No se introduce scraping ni credenciales en el repositorio."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "La degradación de la fuente queda explícita; Mercado Libre aún respondió 403 en la prueba real y no se declara operativo.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-004.md",
@@ -28,6 +28,7 @@
     "npm run features:test: 6 pruebas aprobadas.",
     "review_t004: revisión independiente sin bloqueantes; dos hallazgos de UI corregidos.",
     "review_t004: revisión final tras integrar F-014 sin pérdida de enriquecimiento; sin bloqueantes.",
-    "CI PR #7 contra main: dos jobs validate aprobados el 2026-09-30 UTC."
+    "CI PR #7 contra main: dos jobs validate aprobados el 2026-09-30 UTC.",
+    "PR #7 fusionada a main el 2026-09-30T01:05:33Z; merge commit 2716928a59f83b114d703fe6786cbae352e2a965. Recuperación T-022 tras fallo del workflow de sincronización."
   ]
 }

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
+import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { test } from "node:test";
@@ -95,6 +95,11 @@ test("actualiza F-004 en disco e ignora una segunda ejecución", async () => {
   try {
     for (const name of readdirSync(source).filter((name) => /^F-\d{3}\.json$/.test(name))) {
       cpSync(join(source, name), join(directory, name));
+      const file = join(directory, name);
+      const fixture = JSON.parse(readFileSync(file, "utf8"));
+      if (name === "F-004.json") fixture.status = "done";
+      else if (fixture.status === "done") fixture.status = "merged";
+      writeFileSync(file, `${JSON.stringify(fixture, null, 2)}\n`);
     }
     const options = {
       repository,

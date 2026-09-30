@@ -11,7 +11,7 @@
     "La sincronización es idempotente y recupera features done anteriores, incluido F-004."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Mejora del loop de ingeniería: elimina PR de mantenimiento solo para cambiar done a merged.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-018.md",
@@ -39,6 +39,7 @@
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas.",
     "review_t018: revisión independiente sin bloqueantes tras corregir verificación de rama/archivo y npm ci por intento.",
-    "CI PR #8: dos jobs validate aprobados el 2026-09-30 UTC."
+    "CI PR #8: dos jobs validate aprobados el 2026-09-30 UTC.",
+    "PR #8 fusionada a main el 2026-09-30T01:30:07Z; merge commit cf0dd6041a40fba54f8a573b78697020478141f1. Recuperación T-022 tras fallo del workflow de sincronización."
   ]
 }

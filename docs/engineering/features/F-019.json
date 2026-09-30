@@ -10,17 +10,27 @@
     "El workflow posterior al merge termina verde y actualiza F-004/F-018 a merged tras la integración humana."
   ],
   "sdd": false,
-  "status": "claiming",
+  "status": "in_review",
   "roadmap_note": "Corrección urgente de la automatización integrada en PR #8 antes de iniciar otra feature.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-022.md",
   "branch": "feature/t-022-sync-test-fixture",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/10",
   "depends_on": [18],
   "allowed_modules": [
     "docs/engineering/features/F-019.json",
-    "docs/engineering/tasks/T-022.md"
+    "docs/engineering/tasks/T-022.md",
+    "scripts/sync-merged-features.test.mjs"
   ],
-  "reviewed_by": null,
-  "evidence": []
+  "reviewed_by": "review_t022",
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 14 pruebas aprobadas.",
+    "npm run build: correcto.",
+    "npm run features:check: 19 registros válidos.",
+    "npm run features:test: 6 pruebas aprobadas.",
+    "npm run features:sync:test: 10 pruebas aprobadas con F-004 real en merged.",
+    "review_t022: revisión independiente sin hallazgos bloqueantes; verificó PR #7/#8 contra GitHub y confirmó que el contrato productivo no cambia."
+  ]
 }
