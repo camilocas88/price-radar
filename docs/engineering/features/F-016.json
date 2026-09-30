@@ -11,7 +11,7 @@
     "Existe una prueba que verifica que el normalizador produce datos serializables coherentes con el esquema."
   ],
   "sdd": true,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Quick win derivado de la revisión de mejoras y primer paso hacia F-006 (Persistencia y auditoría) y F-010 (historial y alertas).",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-026.md",
@@ -42,6 +42,7 @@
     "npm run build — OK (prebuild genera Prisma Client)",
     "npm run features:check — OK (20 features)",
     "git diff --check — OK",
-    "Revisión independiente review_f016 — sin bloqueantes"
+    "Revisión independiente review_f016 — sin bloqueantes",
+    "PR #17: CI validate — 2/2 checks exitosos en 10ccb7e"
   ]
 }
