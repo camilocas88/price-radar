@@ -11,13 +11,16 @@
     "Existe una prueba que verifica que el normalizador produce datos serializables coherentes con el esquema."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Quick win derivado de la revisión de mejoras y primer paso hacia F-006 (Persistencia y auditoría) y F-010 (historial y alertas).",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-026.md",
   "branch": "feature/t-026-price-snapshots",
   "pr": "https://github.com/camilocas88/price-radar/pull/17",
-  "depends_on": [1, 2],
+  "depends_on": [
+    1,
+    2
+  ],
   "allowed_modules": [
     "docs/engineering/features/F-016.json",
     "docs/engineering/tasks/T-026.md",
@@ -43,6 +46,7 @@
     "npm run features:check — OK (20 features)",
     "git diff --check — OK",
     "Revisión independiente review_f016 — sin bloqueantes",
-    "PR #17: CI validate — 2/2 checks exitosos en 10ccb7e"
+    "PR #17: CI validate — 2/2 checks exitosos en 10ccb7e",
+    "PR #17 fusionada a main el 2026-09-30T23:48:32Z; merge commit 0a011e321018dfb4ad3c654ab79213257d0332bd."
   ]
 }
