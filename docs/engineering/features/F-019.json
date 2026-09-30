@@ -10,7 +10,7 @@
     "El workflow posterior al merge termina verde y actualiza F-004/F-018 a merged tras la integración humana."
   ],
   "sdd": false,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Corrección urgente de la automatización integrada en PR #8 antes de iniciar otra feature.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-022.md",
@@ -31,6 +31,7 @@
     "npm run features:check: 19 registros válidos.",
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas con F-004 real en merged, tras incorporar F-017.",
-    "review_t022: revisión independiente sin hallazgos bloqueantes; verificó PR #7/#8 contra GitHub y confirmó que el contrato productivo no cambia."
+    "review_t022: revisión independiente sin hallazgos bloqueantes; verificó PR #7/#8 contra GitHub y confirmó que el contrato productivo no cambia.",
+    "CI PR #10 contra main con F-017: dos jobs validate aprobados el 2026-09-30 UTC."
   ]
 }
