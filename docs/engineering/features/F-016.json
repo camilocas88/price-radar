@@ -11,14 +11,28 @@
     "Existe una prueba que verifica que el normalizador produce datos serializables coherentes con el esquema."
   ],
   "sdd": true,
-  "status": "pending",
+  "status": "claiming",
   "roadmap_note": "Quick win derivado de la revisión de mejoras y primer paso hacia F-006 (Persistencia y auditoría) y F-010 (historial y alertas).",
-  "owner": null,
-  "ticket": null,
-  "branch": null,
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-026.md",
+  "branch": "feature/t-026-price-snapshots",
   "pr": null,
   "depends_on": [1, 2],
-  "allowed_modules": [],
+  "allowed_modules": [
+    "docs/engineering/features/F-016.json",
+    "docs/engineering/tasks/T-026.md",
+    "prisma/schema.prisma",
+    "prisma.config.ts",
+    "package.json",
+    "package-lock.json",
+    "src/lib/offer-snapshots.ts",
+    "src/lib/offer-snapshots.test.ts",
+    "src/app/api/offers/route.ts",
+    "src/app/api/offers/route.test.ts",
+    ".github/workflows/ci.yml",
+    ".github/workflows/sync-merged-features.yml",
+    "README.md"
+  ],
   "reviewed_by": null,
   "evidence": []
 }
