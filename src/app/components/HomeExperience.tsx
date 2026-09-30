@@ -32,6 +32,8 @@ export function HomeExperience() {
         status={search.status}
         searchedQuery={search.searchedQuery}
         offers={search.filteredOffers}
+        needsReview={search.needsReview}
+        excludedCount={search.excludedCount}
         onlyVerified={search.onlyVerified}
         watching={search.watching}
         onToggleVerified={search.setOnlyVerified}

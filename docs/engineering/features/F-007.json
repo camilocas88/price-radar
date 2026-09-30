@@ -10,14 +10,38 @@
     "Pruebas cubren variantes cercanas pero no equivalentes."
   ],
   "sdd": true,
-  "status": "pending",
-  "roadmap_note": "Refina el comparador del MVP antes de sumar fuentes.",
-  "owner": null,
-  "ticket": null,
-  "branch": null,
-  "pr": null,
+  "status": "done",
+  "roadmap_note": "Refina el comparador del MVP antes de sumar fuentes. El humano reasignó a Codex los módulos UI necesarios para mostrar coincidencias ambiguas, antes reservados por F-015.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-023.md",
+  "branch": "feature/t-023-product-matching",
+  "pr": "https://github.com/camilocas88/price-radar/pull/13",
   "depends_on": [5],
-  "allowed_modules": [],
-  "reviewed_by": null,
-  "evidence": []
+  "allowed_modules": [
+    "docs/engineering/features/F-007.json",
+    "docs/engineering/tasks/T-023.md",
+    "src/lib/normalize.ts",
+    "src/lib/domain.test.ts",
+    "src/lib/product-matching.ts",
+    "src/lib/product-matching.test.ts",
+    "src/app/api/offers/route.ts",
+    "src/app/api/offers/route.test.ts",
+    "src/app/hooks/useOfferSearch.ts",
+    "src/app/hooks/useOfferSearch.test.ts",
+    "src/app/components/HomeExperience.tsx",
+    "src/app/components/ResultsSection.tsx",
+    "src/app/components/ResultsSection.test.ts"
+  ],
+  "reviewed_by": "review_t023",
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 40 pruebas aprobadas.",
+    "npm run build: correcto.",
+    "npm run features:check: 19 registros válidos.",
+    "npm run features:test: 6 pruebas aprobadas.",
+    "npm run features:sync:test: 10 pruebas aprobadas.",
+    "review_t023: P1 de ambigüedad UI y P2 de parser corregidos; revisión final sin bloqueantes.",
+    "CI PR #13: dos jobs validate aprobados el 2026-09-30 UTC (58 s y 52 s)."
+  ]
 }
