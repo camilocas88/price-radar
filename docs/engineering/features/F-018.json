@@ -1,0 +1,44 @@
+{
+  "id": 18,
+  "name": "merged_status_sync",
+  "title": "Sincronizar automáticamente merged tras merge humano",
+  "description": "Un workflow verifica las PR de features done fusionadas a main y actualiza sus registros a merged sin requerir una segunda PR de mantenimiento.",
+  "plan": "docs/engineering/tasks/T-018.md",
+  "acceptance": [
+    "Solo se marca merged cuando GitHub confirma una PR fusionada específicamente a main y el registro estaba en done.",
+    "Una PR fusionada a otra rama, abierta o sin coincidencia exacta con el repositorio no modifica estados.",
+    "El workflow valida los cambios, usa permisos mínimos y no aprueba ni fusiona PR.",
+    "La sincronización es idempotente y recupera features done anteriores, incluido F-004."
+  ],
+  "sdd": true,
+  "status": "done",
+  "roadmap_note": "Mejora del loop de ingeniería: elimina PR de mantenimiento solo para cambiar done a merged.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-018.md",
+  "branch": "feature/t-018-merged-status-sync",
+  "pr": "https://github.com/camilocas88/price-radar/pull/8",
+  "depends_on": [3],
+  "allowed_modules": [
+    "AGENTS.md",
+    "docs/engineering/FEATURES.md",
+    "docs/engineering/features/F-018.json",
+    "docs/engineering/tasks/T-018.md",
+    ".github/workflows/ci.yml",
+    ".github/workflows/sync-merged-features.yml",
+    "package.json",
+    "scripts/sync-merged-features.mjs",
+    "scripts/sync-merged-features.test.mjs"
+  ],
+  "reviewed_by": "review_t018",
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto.",
+    "npm test: 14 pruebas aprobadas.",
+    "npm run build: correcto.",
+    "npm run features:check: 18 registros válidos.",
+    "npm run features:test: 6 pruebas aprobadas.",
+    "npm run features:sync:test: 10 pruebas aprobadas.",
+    "review_t018: revisión independiente sin bloqueantes tras corregir verificación de rama/archivo y npm ci por intento.",
+    "CI PR #8: dos jobs validate aprobados el 2026-09-30 UTC."
+  ]
+}

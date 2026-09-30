@@ -18,7 +18,7 @@ Los agentes crean por su cuenta tickets, ramas, worktrees, commits y PR; esas ac
 - Handoff: dejar evidencia de comandos, resultado, archivos, riesgos y siguiente paso en el ticket.
 - Revisión: otro agente revisa la interfaz y los cambios de dominio antes de fusionar a `main`.
 - PR de handoff: al terminar cada ticket, el agente crea una Pull Request (PR) desde su rama de trabajo, con el ticket, evidencia de los gates, riesgos y siguiente paso enlazados.
-- Estado: `in_review` al abrir la revisión; `done` solo después de gates, revisión ajena y handoff, siempre antes del merge; `merged` solo tras el merge humano. `npm run features:check` valida el registro.
+- Estado: `in_review` al abrir la revisión; `done` solo después de gates, revisión ajena y handoff, siempre antes del merge; `merged` solo tras el merge humano. Tras un merge a `main`, el workflow de sincronización verifica la PR y actualiza automáticamente `done` a `merged`; no fusiona PR. `npm run features:check` valida el registro.
 - Autoridad de merge: ningún agente puede aprobar ni fusionar una PR. Solo el humano propietario del repositorio puede hacer merge a `main` después de la revisión requerida.
 
 ## Propiedad inicial
