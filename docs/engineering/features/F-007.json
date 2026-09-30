@@ -10,13 +10,15 @@
     "Pruebas cubren variantes cercanas pero no equivalentes."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Refina el comparador del MVP antes de sumar fuentes. El humano reasignó a Codex los módulos UI necesarios para mostrar coincidencias ambiguas, antes reservados por F-015.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-023.md",
   "branch": "feature/t-023-product-matching",
   "pr": "https://github.com/camilocas88/price-radar/pull/13",
-  "depends_on": [5],
+  "depends_on": [
+    5
+  ],
   "allowed_modules": [
     "docs/engineering/features/F-007.json",
     "docs/engineering/tasks/T-023.md",
@@ -42,6 +44,7 @@
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas.",
     "review_t023: P1 de ambigüedad UI y P2 de parser corregidos; revisión final sin bloqueantes.",
-    "CI PR #13: dos jobs validate aprobados el 2026-09-30 UTC (58 s y 52 s)."
+    "CI PR #13: dos jobs validate aprobados el 2026-09-30 UTC (58 s y 52 s).",
+    "PR #13 fusionada a main el 2026-09-30T02:40:03Z; merge commit 38b6fb58873fd276c8883a795979b66c8402ceb1."
   ]
 }
