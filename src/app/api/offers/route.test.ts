@@ -1,12 +1,16 @@
 import { NextRequest } from "next/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { GET } from "./route";
+import { saveOfferSnapshots } from "../../../lib/offer-snapshots";
+
+vi.mock("../../../lib/offer-snapshots", () => ({ saveOfferSnapshots: vi.fn(async () => 0) }));
 
 const request = (query = "iphone") => new NextRequest(`http://localhost/api/offers?query=${encodeURIComponent(query)}`);
 
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
+  vi.mocked(saveOfferSnapshots).mockClear();
 });
 
 describe("GET /api/offers", () => {
@@ -34,6 +38,7 @@ describe("GET /api/offers", () => {
       priceConfirmation: "confirmed", shippingConfirmation: "confirmed", taxConfirmation: "unknown",
     }], source: "mercadolibre" });
     expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(saveOfferSnapshots).toHaveBeenCalledWith("iPhone 17 Pro Max 256 GB nuevo", [expect.objectContaining({ id: "ml-MCO1" })]);
   });
 
   it("solo compara variantes inequívocas y deja las ambiguas para revisión", async () => {
@@ -85,6 +90,24 @@ describe("GET /api/offers", () => {
     const response = await GET(request());
     expect(response.status).toBe(503);
     expect(await response.json()).toMatchObject({ code: "SOURCE_FORBIDDEN", source: "mercadolibre" });
+    expect(saveOfferSnapshots).not.toHaveBeenCalled();
+  });
+
+  it("mantiene la respuesta válida si guardar snapshots falla", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    vi.mocked(saveOfferSnapshots).mockRejectedValueOnce(new Error("database offline"));
+    vi.stubGlobal("fetch", vi.fn().mockImplementation((url: URL | string) => {
+      if (String(url).includes("/sites/MCO/search")) return Promise.resolve(new Response(JSON.stringify({ results: [{
+        id: "MCO1", title: "iPhone 17 Pro Max 256 GB", condition: "new", price: 1000000,
+        currency_id: "COP", permalink: "https://example.test/1",
+      }] }), { status: 200 }));
+      return Promise.resolve(new Response(null, { status: 404 }));
+    }));
+    const response = await GET(request("iPhone 17 Pro Max 256 GB nuevo"));
+    expect(response.status).toBe(200);
+    expect((await response.json()).offers).toHaveLength(1);
+    expect(warn).toHaveBeenCalledWith("price_snapshot_write_failed", { source: "mercadolibre", offerCount: 1 });
+    warn.mockRestore();
   });
 
   it("distingue el límite de consultas", async () => {

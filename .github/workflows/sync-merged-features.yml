@@ -39,6 +39,7 @@ jobs:
             fi
 
             npm ci
+            npm run db:generate
             npm run features:check
             npm run features:test
             npm run features:sync:test

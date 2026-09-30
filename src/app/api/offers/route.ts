@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseOfferContract } from "../../../lib/offer-contract";
+import { saveOfferSnapshots } from "../../../lib/offer-snapshots";
 import { classifySearchResults } from "../../../lib/product-matching";
 import {
   enrichMercadoLibreOffers,
@@ -42,6 +43,11 @@ export async function GET(request: NextRequest) {
     const { matches, needsReview, excludedCount } = classifySearchResults(query, comparableCurrency);
     const baseOffers = normalizeMercadoLibreOffers({ results: matches });
     const offers = (await enrichMercadoLibreOffers(baseOffers, { accessToken, zipCode })).map(parseOfferContract);
+    try {
+      await saveOfferSnapshots(query, offers);
+    } catch {
+      console.warn("price_snapshot_write_failed", { source: "mercadolibre", offerCount: offers.length });
+    }
     return NextResponse.json({ offers, source: "mercadolibre", needsReview, excludedCount });
   } catch {
     return NextResponse.json({ error: "No fue posible consultar Mercado Libre.", code: "SOURCE_UNAVAILABLE", source: "mercadolibre" }, { status: 502 });

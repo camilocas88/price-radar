@@ -11,14 +11,38 @@
     "Existe una prueba que verifica que el normalizador produce datos serializables coherentes con el esquema."
   ],
   "sdd": true,
-  "status": "pending",
+  "status": "done",
   "roadmap_note": "Quick win derivado de la revisión de mejoras y primer paso hacia F-006 (Persistencia y auditoría) y F-010 (historial y alertas).",
-  "owner": null,
-  "ticket": null,
-  "branch": null,
-  "pr": null,
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-026.md",
+  "branch": "feature/t-026-price-snapshots",
+  "pr": "https://github.com/camilocas88/price-radar/pull/17",
   "depends_on": [1, 2],
-  "allowed_modules": [],
-  "reviewed_by": null,
-  "evidence": []
+  "allowed_modules": [
+    "docs/engineering/features/F-016.json",
+    "docs/engineering/tasks/T-026.md",
+    "prisma/schema.prisma",
+    "prisma.config.ts",
+    "package.json",
+    "package-lock.json",
+    "src/lib/offer-snapshots.ts",
+    "src/lib/offer-snapshots.test.ts",
+    "src/app/api/offers/route.ts",
+    "src/app/api/offers/route.test.ts",
+    ".github/workflows/ci.yml",
+    ".github/workflows/sync-merged-features.yml",
+    "README.md"
+  ],
+  "reviewed_by": "Codex (agente revisor independiente review_f016)",
+  "evidence": [
+    "npm run db:generate — OK",
+    "npm run lint — OK",
+    "npm run typecheck — OK",
+    "npm test — OK (79 pruebas)",
+    "npm run build — OK (prebuild genera Prisma Client)",
+    "npm run features:check — OK (20 features)",
+    "git diff --check — OK",
+    "Revisión independiente review_f016 — sin bloqueantes",
+    "PR #17: CI validate — 2/2 checks exitosos en 10ccb7e"
+  ]
 }
