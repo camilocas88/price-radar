@@ -1,0 +1,37 @@
+{
+  "id": 20,
+  "name": "link_input_routing",
+  "title": "Enlaces en el buscador y precio menor entre aportes",
+  "description": "El buscador principal envía URLs a Mercado Libre como texto, por lo que una URL pegada muestra un falso error de fuente. Encaminar URLs al comparador de enlaces y destacar el menor precio entre aportes del mismo producto.",
+  "plan": "docs/engineering/tasks/T-025.md",
+  "acceptance": [
+    "Una URL pegada en el buscador principal abre automáticamente el flujo de comparación sin llamar a Mercado Libre.",
+    "Una URL heredada en ?query= también se reconoce como enlace y no muestra resultados de búsqueda erróneos.",
+    "Dos o más enlaces aportados se ordenan y el menor precio se destaca con diferencia calculada sobre los demás, sin afirmar que sea el mejor precio del mercado.",
+    "Las consultas de texto siguen usando Mercado Libre y la navegación atrás/adelante conserva el modo correcto."
+  ],
+  "sdd": true,
+  "status": "claiming",
+  "roadmap_note": "Corrección de usabilidad observada tras integrar F-008; no añade descubrimiento automático de otras tiendas.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-025.md",
+  "branch": "feature/t-025-link-search-routing",
+  "pr": null,
+  "depends_on": [8, 15],
+  "allowed_modules": [
+    "docs/engineering/features/F-020.json",
+    "docs/engineering/tasks/T-025.md",
+    "src/lib/link-input.ts",
+    "src/lib/link-input.test.ts",
+    "src/app/hooks/useOfferSearch.ts",
+    "src/app/hooks/useOfferSearch.test.ts",
+    "src/app/components/SearchForm.tsx",
+    "src/app/components/HomeExperience.tsx",
+    "src/app/components/Hero.tsx",
+    "src/app/components/CompareLinkSection.tsx",
+    "src/app/components/CompareLinkSection.test.ts",
+    "README.md"
+  ],
+  "reviewed_by": null,
+  "evidence": []
+}
