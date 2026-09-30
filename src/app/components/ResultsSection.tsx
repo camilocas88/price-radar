@@ -2,8 +2,8 @@
 
 import { Bell, SlidersHorizontal } from "lucide-react";
 import type { Offer } from "@/lib/offers";
-import type { SearchStatus } from "@/app/hooks/useOfferSearch";
-import { demoProduct } from "@/lib/demo-data";
+import type { ReviewItem, SearchStatus } from "@/app/hooks/useOfferSearch";
+import { demoProduct } from "../../lib/demo-data";
 import { OfferCard } from "./OfferCard";
 import { SkeletonList } from "./SkeletonList";
 
@@ -11,6 +11,8 @@ type ResultsSectionProps = {
   status: SearchStatus;
   searchedQuery: string;
   offers: Offer[];
+  needsReview: ReviewItem[];
+  excludedCount: number;
   onlyVerified: boolean;
   watching: boolean;
   onToggleVerified: (value: boolean) => void;
@@ -21,6 +23,8 @@ export function ResultsSection({
   status,
   searchedQuery,
   offers,
+  needsReview,
+  excludedCount,
   onlyVerified,
   watching,
   onToggleVerified,
@@ -55,7 +59,7 @@ export function ResultsSection({
         </div>
         <button
           type="button"
-          disabled={!isLive}
+          disabled={!isLive || offers.length === 0}
           onClick={onToggleWatching}
           className={`inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 ${
             watching ? "border-[#14532d] bg-[#edf8f0] text-[#14532d]" : "border-[#cbd9cf] bg-white"
@@ -86,9 +90,23 @@ export function ResultsSection({
         </aside>
         <div className="space-y-3">
           {isLoading && <SkeletonList count={3} />}
-          {isLive && offers.length === 0 && (
+          {isLive && needsReview.length > 0 && (
+            <div role="status" className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-950">
+              <p className="font-semibold">{needsReview.length} resultado(s) requieren verificar la variante.</p>
+              <p className="mt-1">Algunas publicaciones no informan modelo, capacidad o condición. Afina la búsqueda o verifica el anuncio antes de comparar precios.</p>
+              <ul className="mt-3 list-disc space-y-1 pl-5">
+                {needsReview.slice(0, 5).map((item) => <li key={item.id}>{item.title}</li>)}
+              </ul>
+            </div>
+          )}
+          {isLive && offers.length === 0 && needsReview.length === 0 && excludedCount > 0 && (
             <p className="rounded-2xl border border-[#dbe6de] bg-white p-5 text-sm text-[#637a6e]">
-              No encontramos ofertas con precio en COP para esta búsqueda.
+              Encontramos artículos, pero son variantes distintas de la buscada y no se comparan entre sí.
+            </p>
+          )}
+          {isLive && offers.length === 0 && needsReview.length === 0 && excludedCount === 0 && (
+            <p className="rounded-2xl border border-[#dbe6de] bg-white p-5 text-sm text-[#637a6e]">
+              No encontramos ofertas comparables con precio en COP para esta búsqueda.
             </p>
           )}
           {status === "unavailable" && (

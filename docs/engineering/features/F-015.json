@@ -26,20 +26,20 @@
     "src/app/components/Hero.tsx",
     "src/app/components/SearchForm.tsx",
     "src/app/components/StatusStrip.tsx",
-    "src/app/components/ResultsSection.tsx",
     "src/app/components/OfferCard.tsx",
-    "src/app/components/SkeletonList.tsx",
-    "src/app/components/HomeExperience.tsx",
-    "src/app/hooks/useOfferSearch.ts",
-    "src/app/hooks/useOfferSearch.test.ts"
+    "src/app/components/SkeletonList.tsx"
   ],
-  "reviewed_by": null,
+  "reviewed_by": "review_f015_postmerge",
   "evidence": [
     "npm run lint: correcto.",
     "npm run typecheck: correcto.",
     "npm test: 24 pruebas aprobadas (Vitest, 5 archivos).",
     "npm run build: correcto; ruta / se genera estática con Suspense.",
     "npm run features:check: 19 registros válidos.",
-    "npm run features:sync:test: 10 subpruebas ok (fix del fixture ya vivo en main vía F-005)."
+    "npm run features:sync:test: 10 subpruebas ok (fix del fixture ya vivo en main vía F-005).",
+    "Reasignación humana a Codex de hook y componentes de resultados para corrección postmerge en PR #13; Claude conserva autoría original.",
+    "review_f015_postmerge: detectó desincronización URL/campo y respuestas tardías; segunda revisión del fix sin bloqueantes.",
+    "npm run lint, npm run typecheck y npm run build: correctos tras el fix postmerge en PR #13.",
+    "npm test: 40 pruebas aprobadas tras el fix postmerge en PR #13."
   ]
 }
