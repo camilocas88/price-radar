@@ -28,7 +28,11 @@ describe("GET /api/offers", () => {
     vi.stubGlobal("fetch", fetchMock);
     const response = await GET(request());
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ offers: [{ id: "ml-MCO1", delivery: "Envío gratis confirmado por Mercado Libre" }], source: "mercadolibre" });
+    expect(await response.json()).toMatchObject({ offers: [{
+      id: "ml-MCO1", delivery: "Envío gratis confirmado por Mercado Libre",
+      source: "mercadolibre", currency: "COP", availability: "unknown",
+      priceConfirmation: "confirmed", shippingConfirmation: "confirmed", taxConfirmation: "unknown",
+    }], source: "mercadolibre" });
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
@@ -37,6 +41,22 @@ describe("GET /api/offers", () => {
     const response = await GET(request());
     expect(response.status).toBe(502);
     expect(await response.json()).toMatchObject({ code: "SOURCE_UNAVAILABLE" });
+  });
+
+  it("rechaza una oferta que no cumple el contrato en el límite del endpoint", async () => {
+    const fetchMock = vi.fn().mockImplementation((url: URL | string) => {
+      if (String(url).includes("/sites/MCO/search")) {
+        return Promise.resolve(new Response(JSON.stringify({ results: [{
+          id: "MCO2", title: "Teléfono", price: 1000000, currency_id: "COP", permalink: "url-invalida",
+        }] }), { status: 200 }));
+      }
+      return Promise.resolve(new Response(null, { status: 404 }));
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await GET(request());
+    expect(response.status).toBe(502);
+    expect(await response.json()).toMatchObject({ code: "SOURCE_UNAVAILABLE", source: "mercadolibre" });
   });
 
   it("informa acceso denegado sin convertirlo en una lista vacía", async () => {

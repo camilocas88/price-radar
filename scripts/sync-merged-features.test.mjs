@@ -97,7 +97,10 @@ test("actualiza F-004 en disco e ignora una segunda ejecución", async () => {
       cpSync(join(source, name), join(directory, name));
       const file = join(directory, name);
       const fixture = JSON.parse(readFileSync(file, "utf8"));
-      if (name === "F-004.json") fixture.status = "done";
+      if (name === "F-004.json") {
+        fixture.status = "done";
+        fixture.allowed_modules = ["docs/engineering/features/F-004.json"];
+      }
       else if (fixture.status === "done") fixture.status = "merged";
       writeFileSync(file, `${JSON.stringify(fixture, null, 2)}\n`);
     }
