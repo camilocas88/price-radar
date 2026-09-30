@@ -99,18 +99,9 @@ test("actualiza F-004 en disco e ignora una segunda ejecución", async () => {
       const fixture = JSON.parse(readFileSync(file, "utf8"));
       if (name === "F-004.json") {
         fixture.status = "done";
-      } else if (fixture.status === "done") {
-        fixture.status = "merged";
-      } else if (["claiming", "in_progress", "blocked", "in_review"].includes(fixture.status)) {
-        fixture.status = "pending";
-        fixture.owner = null;
-        fixture.ticket = null;
-        fixture.branch = null;
-        fixture.pr = null;
-        fixture.allowed_modules = [];
-        fixture.reviewed_by = null;
-        fixture.evidence = [];
+        fixture.allowed_modules = ["docs/engineering/features/F-004.json"];
       }
+      else if (fixture.status === "done") fixture.status = "merged";
       writeFileSync(file, `${JSON.stringify(fixture, null, 2)}\n`);
     }
     const options = {
