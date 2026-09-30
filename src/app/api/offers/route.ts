@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { normalizeMercadoLibreOffers, type MercadoLibreSearchResponse } from "../../../lib/mercadolibre";
+import {
+  enrichMercadoLibreOffers,
+  normalizeMercadoLibreOffers,
+  type MercadoLibreSearchResponse,
+} from "../../../lib/mercadolibre";
 
 const MAX_QUERY_LENGTH = 120;
 
@@ -14,6 +18,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const accessToken = process.env.MERCADOLIBRE_ACCESS_TOKEN;
+    const zipCode = process.env.MERCADOLIBRE_DEFAULT_ZIP_CODE?.trim() || undefined;
     const response = await fetch(url, {
       headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
       cache: "no-store",
@@ -31,7 +36,9 @@ export async function GET(request: NextRequest) {
     if (!Array.isArray(payload?.results)) {
       return NextResponse.json({ error: "Mercado Libre devolvió una respuesta inesperada.", code: "SOURCE_UNAVAILABLE", source: "mercadolibre" }, { status: 502 });
     }
-    return NextResponse.json({ offers: normalizeMercadoLibreOffers(payload), source: "mercadolibre" });
+    const baseOffers = normalizeMercadoLibreOffers(payload);
+    const offers = await enrichMercadoLibreOffers(baseOffers, { accessToken, zipCode });
+    return NextResponse.json({ offers, source: "mercadolibre" });
   } catch {
     return NextResponse.json({ error: "No fue posible consultar Mercado Libre.", code: "SOURCE_UNAVAILABLE", source: "mercadolibre" }, { status: 502 });
   }
