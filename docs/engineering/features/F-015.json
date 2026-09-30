@@ -3,7 +3,7 @@
   "name": "search_url_and_components",
   "title": "Componentes de UI y búsqueda sincronizada por URL",
   "description": "Separar page.tsx en componentes reutilizables (Hero, SearchForm, OfferList, OfferCard, Filters) y sincronizar el término de búsqueda con el query string ?query= para que la búsqueda sea compartible y navegable con back/forward.",
-  "plan": "README.md#roadmap",
+  "plan": "docs/engineering/tasks/T-019.md",
   "acceptance": [
     "page.tsx queda como composición; cada bloque vive en un archivo propio bajo src/app/components/.",
     "El estado del término de búsqueda lee y escribe ?query= usando useSearchParams/useRouter sin recargas completas.",
@@ -11,14 +11,28 @@
     "Skeleton visible mientras loading es true; no hay regresiones en accesibilidad ni tests existentes."
   ],
   "sdd": false,
-  "status": "pending",
+  "status": "claiming",
   "roadmap_note": "Quick win derivado de la revisión de mejoras: prepara el terreno para SEO, historial de búsquedas y detalle de producto.",
-  "owner": null,
-  "ticket": null,
-  "branch": null,
+  "owner": "Claude",
+  "ticket": "docs/engineering/tasks/T-019.md",
+  "branch": "feature/t-019-search-url-components",
   "pr": null,
   "depends_on": [1],
-  "allowed_modules": [],
+  "allowed_modules": [
+    "docs/engineering/features/F-015.json",
+    "docs/engineering/tasks/T-019.md",
+    "src/app/page.tsx",
+    "src/app/components/Nav.tsx",
+    "src/app/components/Hero.tsx",
+    "src/app/components/SearchForm.tsx",
+    "src/app/components/StatusStrip.tsx",
+    "src/app/components/ResultsSection.tsx",
+    "src/app/components/OfferCard.tsx",
+    "src/app/components/SkeletonList.tsx",
+    "src/app/components/HomeExperience.tsx",
+    "src/app/hooks/useOfferSearch.ts",
+    "src/app/hooks/useOfferSearch.test.ts"
+  ],
   "reviewed_by": null,
   "evidence": []
 }
