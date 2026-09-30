@@ -11,7 +11,7 @@
     "La sincronización es idempotente y recupera features done anteriores, incluido F-004."
   ],
   "sdd": true,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Mejora del loop de ingeniería: elimina PR de mantenimiento solo para cambiar done a merged.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-018.md",
@@ -38,6 +38,7 @@
     "npm run features:check: 18 registros válidos.",
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas.",
-    "review_t018: revisión independiente sin bloqueantes tras corregir verificación de rama/archivo y npm ci por intento."
+    "review_t018: revisión independiente sin bloqueantes tras corregir verificación de rama/archivo y npm ci por intento.",
+    "CI PR #8: dos jobs validate aprobados el 2026-09-30 UTC."
   ]
 }

@@ -102,7 +102,9 @@ test("actualiza F-004 en disco e ignora una segunda ejecución", async () => {
       directory,
       fetchImpl: async (url) => ({ ok: true, json: async () => url.includes("/files?")
         ? [{ filename: "docs/engineering/features/F-004.json" }]
-        : mergedPr() }),
+        : new URL(url).pathname.endsWith("/pulls/8")
+          ? { ...mergedPr(), number: 8, merged_at: null }
+          : mergedPr() }),
     };
     assert.deepEqual(await syncMergedFeatures(options), [7]);
     const updated = JSON.parse(readFileSync(join(directory, "F-004.json"), "utf8"));
