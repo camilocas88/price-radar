@@ -11,21 +11,23 @@
   ],
   "sdd": true,
   "status": "done",
-  "roadmap_note": "Prioridad inmediata tras T-003; requisito para declarar resultados reales operativos.",
+  "roadmap_note": "La degradación de la fuente queda explícita; Mercado Libre aún respondió 403 en la prueba real y no se declara operativo.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-004.md",
   "branch": "feature/t-004-source-access",
-  "pr": "https://github.com/camilocas88/price-radar/pull/3",
+  "pr": "https://github.com/camilocas88/price-radar/pull/7",
   "depends_on": [2, 3],
   "allowed_modules": ["docs/engineering/features/F-004.json", "docs/engineering/tasks/T-004.md", "src/app/api/offers/route.ts", "src/app/api/offers/route.test.ts", "src/app/page.tsx"],
   "reviewed_by": "review_t004",
   "evidence": [
     "npm run lint: correcto.",
     "npm run typecheck: correcto.",
-    "npm test: 10 pruebas aprobadas.",
+    "npm test: 14 pruebas aprobadas.",
     "npm run build: correcto.",
-    "npm run features:check: 13 registros válidos.",
+    "npm run features:check: 17 registros válidos.",
+    "npm run features:test: 6 pruebas aprobadas.",
     "review_t004: revisión independiente sin bloqueantes; dos hallazgos de UI corregidos.",
-    "CI PR #3 sobre PR #5: dos jobs validate aprobados el 2026-09-30 UTC."
+    "review_t004: revisión final tras integrar F-014 sin pérdida de enriquecimiento; sin bloqueantes.",
+    "CI PR #7 contra main: dos jobs validate aprobados el 2026-09-30 UTC."
   ]
 }
