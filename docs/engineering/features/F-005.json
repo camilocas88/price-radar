@@ -10,13 +10,15 @@
     "Pruebas cubren valores ausentes y monedas diferentes."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Roadmap 2. Puede planificarse en paralelo con F-004 si se acuerda el contrato compartido.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-021.md",
   "branch": "feature/t-021-offer-contract",
   "pr": "https://github.com/camilocas88/price-radar/pull/11",
-  "depends_on": [3],
+  "depends_on": [
+    3
+  ],
   "allowed_modules": [
     "docs/engineering/features/F-005.json",
     "docs/engineering/tasks/T-021.md",
@@ -39,6 +41,7 @@
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas.",
     "review_t021: hallazgo de envío gratis contradicho por detalle corregido; segunda revisión sin bloqueantes.",
-    "CI PR #11: dos jobs validate aprobados el 2026-09-30 UTC contra main (41 s y 54 s)."
+    "CI PR #11: dos jobs validate aprobados el 2026-09-30 UTC contra main (41 s y 54 s).",
+    "PR #11 fusionada a main el 2026-09-30T02:02:47Z; merge commit e1bd6781ca99513e1c95946efab2cafd29a2a86d."
   ]
 }
