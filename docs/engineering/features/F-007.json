@@ -10,7 +10,7 @@
     "Pruebas cubren variantes cercanas pero no equivalentes."
   ],
   "sdd": true,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Refina el comparador del MVP antes de sumar fuentes. El humano reasignó a Codex los módulos UI necesarios para mostrar coincidencias ambiguas, antes reservados por F-015.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-023.md",
@@ -41,6 +41,7 @@
     "npm run features:check: 19 registros válidos.",
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas.",
-    "review_t023: P1 de ambigüedad UI y P2 de parser corregidos; revisión final sin bloqueantes."
+    "review_t023: P1 de ambigüedad UI y P2 de parser corregidos; revisión final sin bloqueantes.",
+    "CI PR #13: dos jobs validate aprobados el 2026-09-30 UTC (58 s y 52 s)."
   ]
 }

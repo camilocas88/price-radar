@@ -11,7 +11,7 @@
     "Skeleton visible mientras loading es true; no hay regresiones en accesibilidad ni tests existentes."
   ],
   "sdd": false,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Quick win derivado de la revisión de mejoras: prepara el terreno para SEO, historial de búsquedas y detalle de producto.",
   "owner": "Claude",
   "ticket": "docs/engineering/tasks/T-019.md",
@@ -40,6 +40,7 @@
     "Reasignación humana a Codex de hook y componentes de resultados para corrección postmerge en PR #13; Claude conserva autoría original.",
     "review_f015_postmerge: detectó desincronización URL/campo y respuestas tardías; segunda revisión del fix sin bloqueantes.",
     "npm run lint, npm run typecheck y npm run build: correctos tras el fix postmerge en PR #13.",
-    "npm test: 40 pruebas aprobadas tras el fix postmerge en PR #13."
+    "npm test: 40 pruebas aprobadas tras el fix postmerge en PR #13.",
+    "CI PR #13 del fix postmerge: dos jobs validate aprobados el 2026-09-30 UTC (58 s y 52 s)."
   ]
 }
