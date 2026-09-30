@@ -31,7 +31,8 @@
     "src/app/components/SkeletonList.tsx",
     "src/app/components/HomeExperience.tsx",
     "src/app/hooks/useOfferSearch.ts",
-    "src/app/hooks/useOfferSearch.test.ts"
+    "src/app/hooks/useOfferSearch.test.ts",
+    "scripts/sync-merged-features.test.mjs"
   ],
   "reviewed_by": null,
   "evidence": [
@@ -39,6 +40,7 @@
     "npm run typecheck: correcto.",
     "npm test: 24 pruebas aprobadas (Vitest, 5 archivos).",
     "npm run build: correcto; ruta / se genera estática con Suspense.",
-    "npm run features:check: 19 registros válidos."
+    "npm run features:check: 19 registros válidos.",
+    "npm run features:sync:test: 10 subpruebas ok tras reforzar el fixture."
   ]
 }
