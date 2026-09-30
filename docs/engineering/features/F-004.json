@@ -10,7 +10,7 @@
     "No se introduce scraping ni credenciales en el repositorio."
   ],
   "sdd": true,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Prioridad inmediata tras T-003; requisito para declarar resultados reales operativos.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-004.md",
@@ -18,13 +18,14 @@
   "pr": "https://github.com/camilocas88/price-radar/pull/3",
   "depends_on": [2, 3],
   "allowed_modules": ["docs/engineering/features/F-004.json", "docs/engineering/tasks/T-004.md", "src/app/api/offers/route.ts", "src/app/api/offers/route.test.ts", "src/app/page.tsx"],
-  "reviewed_by": null,
+  "reviewed_by": "review_t004",
   "evidence": [
     "npm run lint: correcto.",
     "npm run typecheck: correcto.",
     "npm test: 10 pruebas aprobadas.",
     "npm run build: correcto.",
     "npm run features:check: 13 registros válidos.",
-    "review_t004: revisión independiente sin bloqueantes; dos hallazgos de UI corregidos."
+    "review_t004: revisión independiente sin bloqueantes; dos hallazgos de UI corregidos.",
+    "CI PR #3 sobre PR #5: dos jobs validate aprobados el 2026-09-30 UTC."
   ]
 }
