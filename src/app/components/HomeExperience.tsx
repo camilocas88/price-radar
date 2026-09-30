@@ -28,19 +28,21 @@ export function HomeExperience() {
           onSubmit={search.submit}
         />
       </section>
+      <CompareLinkSection linkRequest={search.linkRequest} />
       <StatusStrip />
-      <ResultsSection
-        status={search.status}
-        searchedQuery={search.searchedQuery}
-        offers={search.filteredOffers}
-        needsReview={search.needsReview}
-        excludedCount={search.excludedCount}
-        onlyVerified={search.onlyVerified}
-        watching={search.watching}
-        onToggleVerified={search.setOnlyVerified}
-        onToggleWatching={search.toggleWatching}
-      />
-      <CompareLinkSection />
+      {search.status !== "link" && (
+        <ResultsSection
+          status={search.status}
+          searchedQuery={search.searchedQuery}
+          offers={search.filteredOffers}
+          needsReview={search.needsReview}
+          excludedCount={search.excludedCount}
+          onlyVerified={search.onlyVerified}
+          watching={search.watching}
+          onToggleVerified={search.setOnlyVerified}
+          onToggleWatching={search.toggleWatching}
+        />
+      )}
       <footer className="border-t border-[#dbe6de] px-5 py-8 text-center text-xs text-[#637a6e]">
         Radar Precio · Mercado Libre mediante API oficial o enlaces aportados · Colombia
       </footer>

@@ -79,6 +79,56 @@ describe("parseInitialQuery", () => {
 });
 
 describe("useOfferSearch", () => {
+  it("encamina la URL de Éxito pegada en el buscador al comparador sin consultar Mercado Libre", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const url = "https://www.exito.com/iphone-18-pro-max-5gb-256gb-12gb-ram-negro-105210111-mp/p";
+    await act(async () => { root.render(createElement(Probe)); });
+    await act(async () => latest.setQuery(url));
+    await act(async () => latest.submit());
+    expect(latest.status).toBe("link");
+    expect(latest.linkRequest?.url).toBe(url);
+    expect(navigation.pushes).toEqual([`/?link=${encodeURIComponent(url)}`]);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("interpreta una URL heredada en query como enlace y respeta navegación a texto y regreso", async () => {
+    const url = "https://www.exito.com/producto/p";
+    navigation.current = `query=${encodeURIComponent(url)}`;
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({ offers: [] }), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    await act(async () => { root.render(createElement(Probe)); });
+    expect(latest.status).toBe("link");
+    expect(latest.linkRequest?.url).toBe(url);
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    await navigate("iPhone 18 Pro Max");
+    expect(latest.status).toBe("success");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    await navigate(url);
+    expect(latest.status).toBe("link");
+    expect(latest.linkRequest?.url).toBe(url);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("abre un enlace directo y descarta una respuesta tardía de Mercado Libre al cambiar de modo", async () => {
+    let resolveSearch!: (response: Response) => void;
+    const fetchMock = vi.fn(() => new Promise<Response>((resolve) => { resolveSearch = resolve; }));
+    vi.stubGlobal("fetch", fetchMock);
+    navigation.current = "query=iphone";
+    await act(async () => { root.render(createElement(Probe)); });
+    const url = "https://www.exito.com/producto/p";
+    await act(async () => {
+      navigation.current = `link=${encodeURIComponent(url)}`;
+      for (const listener of navigation.listeners) listener();
+    });
+    expect(latest.status).toBe("link");
+    expect(latest.linkRequest?.url).toBe(url);
+    await act(async () => resolveSearch(new Response(JSON.stringify({ offers: [] }), { status: 200 })));
+    expect(latest.status).toBe("link");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it("sincroniza campo, URL y resultados al navegar atrás y adelante", async () => {
     const fetchMock = vi.fn(async () => new Response(JSON.stringify({ offers: [], needsReview: [], excludedCount: 0 }), { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
