@@ -11,7 +11,7 @@
     "Existen pruebas del normalizador para respuestas con envío gratis, envío pago y sin datos."
   ],
   "sdd": false,
-  "status": "in_review",
+  "status": "merged",
   "roadmap_note": "Quick win derivado de la revisión de mejoras: ranking honesto de precio total antes de habilitar historial y alertas.",
   "owner": "Claude",
   "ticket": "docs/engineering/tasks/T-014.md",
@@ -29,12 +29,14 @@
     "src/app/api/offers/route.ts",
     ".env.example"
   ],
-  "reviewed_by": null,
+  "reviewed_by": "Codex",
   "evidence": [
     "npm run lint: correcto.",
     "npm run typecheck: correcto.",
     "npm test: 8 pruebas aprobadas (Vitest).",
     "npm run build: correcto.",
-    "npm run features:check: 17 registros válidos."
+    "npm run features:check: 17 registros válidos.",
+    "PR #4 fusionada por el humano el 2026-09-30 00:09:05 UTC; merge commit 0e612e6febcedf9339afbe5e9b6f2b65bfc2cff3; ambos jobs validate pasaron.",
+    "Revisión retrospectiva de Codex, posterior al merge: sin bloqueantes de integración o seguridad; no sustituye la revisión previa exigida por AGENTS.md. Hallazgo P2 en T-015: se consulta /items aun cuando la búsqueda ya informa envío gratis."
   ]
 }
