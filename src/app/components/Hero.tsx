@@ -11,15 +11,20 @@ type HeroProps = {
 export function Hero({ status, searchedQuery, offersCount }: HeroProps) {
   const isDemo = status === "demo";
   const isLive = status === "success";
-  const displayQuery = isDemo ? demoProduct.name : searchedQuery;
-  const summaryHeadline = isDemo
+  const isLink = status === "link";
+  const displayQuery = isLink ? "Confirma el anuncio y compáralo abajo" : isDemo ? demoProduct.name : searchedQuery;
+  const summaryHeadline = isLink
+    ? "Comparación de enlaces aportados"
+    : isDemo
     ? "Ejemplo listo para explorar"
     : isLive
       ? "Resultados en tiempo real"
       : status === "loading"
         ? "Consultando fuente oficial"
         : "Fuente temporalmente no disponible";
-  const sourceLabel = isDemo
+  const sourceLabel = isLink
+    ? "Enlace público"
+    : isDemo
     ? "Demo"
     : isLive
       ? "Mercado Libre"
@@ -44,8 +49,8 @@ export function Hero({ status, searchedQuery, offersCount }: HeroProps) {
         <p className="text-sm text-green-100">{summaryHeadline}</p>
         <p className="mt-2 text-2xl font-medium">{displayQuery}</p>
         <div className="mt-5 flex justify-between border-t border-white/15 pt-4 text-sm">
-          <span>Ofertas comparadas</span>
-          <b>{offersCount}</b>
+          <span>{isLink ? "Estado" : "Ofertas comparadas"}</span>
+          <b>{isLink ? "Sin verificar" : offersCount}</b>
         </div>
         <div className="mt-2 flex justify-between text-sm">
           <span>Fuente</span>

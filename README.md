@@ -39,7 +39,7 @@ npm run build
 
 Los impuestos, conversión y entrega se etiquetan como estimados cuando no están confirmados. No se debe automatizar login, CAPTCHA, bloqueos o contenido contrario a los términos de una plataforma.
 
-El comparador de enlaces no requiere credenciales ni la disponibilidad de la API de Mercado Libre. Acepta dos o más enlaces en la sesión y ordena sus precios publicados en COP; no verifica automáticamente variantes, precio final, inventario, envío, impuestos ni garantía. Si la página no expone JSON-LD público, pide título y precio. Los aportes no se guardan ni se mezclan con resultados confirmados de API.
+El campo principal acepta una búsqueda de texto o una URL pública. El texto va a Mercado Libre; la URL abre directamente el comparador de enlaces, sin depender de esa API. Puedes añadir dos o más enlaces en la sesión y ver el menor precio publicado en COP **entre esos enlaces** y la diferencia frente a los demás; no es una búsqueda automática del precio más barato de todo el mercado. No se verifican automáticamente variantes, precio final, inventario, envío, impuestos ni garantía. Si la página no expone JSON-LD público, pide título y precio. Los aportes no se guardan ni se mezclan con resultados confirmados de API.
 
 ## Arquitectura y extensión
 

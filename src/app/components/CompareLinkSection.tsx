@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CompareLinkDraft } from "@/lib/compare-link";
 
 type ComparedLink = { url: string; store: string; title: string; price: number };
@@ -8,7 +8,7 @@ type CompareLinkResponse = CompareLinkDraft & { error?: string };
 
 const currency = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });
 
-export function CompareLinkSection() {
+export function CompareLinkSection({ linkRequest }: { linkRequest?: { url: string; id: number } | null }) {
   const [url, setUrl] = useState("");
   const [draft, setDraft] = useState<CompareLinkDraft | null>(null);
   const [title, setTitle] = useState("");
@@ -19,9 +19,8 @@ export function CompareLinkSection() {
   const requestSequence = useRef(0);
   const sorted = useMemo(() => [...links].sort((left, right) => left.price - right.price), [links]);
 
-  async function inspect(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!url.trim()) return;
+  const inspectUrl = useCallback(async (value: string) => {
+    if (!value.trim()) return;
     const sequence = ++requestSequence.current;
     setLoading(true);
     setDraft(null);
@@ -30,7 +29,7 @@ export function CompareLinkSection() {
       const response = await fetch("/api/compare-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: url.trim() }),
+        body: JSON.stringify({ url: value.trim() }),
       });
       const result = (await response.json()) as CompareLinkResponse;
       if (!response.ok) throw new Error(result.error ?? "No fue posible revisar el enlace.");
@@ -44,6 +43,23 @@ export function CompareLinkSection() {
     } finally {
       if (sequence === requestSequence.current) setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    if (!linkRequest) return;
+    let active = true;
+    queueMicrotask(() => {
+      if (!active) return;
+      setUrl(linkRequest.url);
+      void inspectUrl(linkRequest.url);
+      document.getElementById("comparar-enlaces")?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+    });
+    return () => { active = false; };
+  }, [inspectUrl, linkRequest]);
+
+  function inspect(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void inspectUrl(url);
   }
 
   function addLink(event: FormEvent<HTMLFormElement>) {
@@ -110,12 +126,13 @@ export function CompareLinkSection() {
         {sorted.length > 0 && (
           <div className="mt-8">
             <h3 className="text-lg font-semibold">Enlaces aportados ({sorted.length})</h3>
-            <p className="mt-1 text-sm text-[#637a6e]">Ordenados por precio publicado en COP; no es precio final ni garantía de disponibilidad.</p>
+            <p className="mt-1 text-sm text-[#637a6e]">Ordenados por precio publicado en COP. El menor solo se calcula entre tus enlaces; no es el mejor precio del mercado ni un precio final.</p>
             {sorted.length < 2 && <p className="mt-2 text-sm text-[#637a6e]">Añade otro enlace para comparar.</p>}
             <ol className="mt-4 grid gap-3 md:grid-cols-2">
               {sorted.map((link) => (
-                <li key={link.url} className="rounded-xl border border-[#dbe6de] p-4">
+                <li key={link.url} className={`rounded-xl border p-4 ${sorted.length > 1 && link.price === sorted[0].price ? "border-[#197243] bg-[#f1faf3]" : "border-[#dbe6de]"}`}>
                   <p className="text-xs font-semibold text-[#197243]">{link.store} · APORTE NO VERIFICADO</p>
+                  {sorted.length > 1 && <p className="mt-1 text-xs font-semibold text-[#14532d]">{link.price === sorted[0].price ? "MENOR PRECIO ENTRE TUS ENLACES" : `${currency.format(link.price - sorted[0].price)} más que el menor`}</p>}
                   <p className="mt-1 font-semibold">{link.title}</p>
                   <p className="mt-2 text-xl font-semibold">{currency.format(link.price)}</p>
                   <a href={link.url} target="_blank" rel="noopener noreferrer nofollow" className="mt-2 inline-block text-sm text-[#14532d] underline">Ver anuncio original</a>

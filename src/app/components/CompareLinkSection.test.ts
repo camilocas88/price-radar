@@ -60,8 +60,21 @@ describe("CompareLinkSection", () => {
     const cards = container.querySelectorAll("ol li");
     expect(cards).toHaveLength(2);
     expect(cards[0].textContent).toContain("1.500.000");
+    expect(cards[0].textContent).toContain("MENOR PRECIO ENTRE TUS ENLACES");
     expect(cards[1].textContent).toContain("2.000.000");
-    expect(container.textContent).toContain("no es precio final");
+    expect(cards[1].textContent).toContain("500.000");
+    expect(container.textContent).toContain("ni un precio final");
+    expect(container.textContent).toContain("no es el mejor precio del mercado");
+  });
+
+  it("revisa automáticamente un enlace recibido desde el buscador principal", async () => {
+    const url = "https://www.exito.com/iphone-18-pro-max-5gb-256gb-12gb-ram-negro-105210111-mp/p";
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({ url, store: "Éxito", extraction: "manual", missingFields: ["title", "price"], notice: "Completa los datos." }), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    await act(async () => root.render(createElement(CompareLinkSection, { linkRequest: { url, id: 1 } })));
+    expect(fetchMock).toHaveBeenCalledWith("/api/compare-link", expect.objectContaining({ body: JSON.stringify({ url }) }));
+    expect((container.querySelector('input[type="url"]') as HTMLInputElement).value).toBe(url);
+    expect(container.textContent).toContain("Confirma el anuncio de Éxito");
   });
 
   it("ignora una respuesta tardía si el usuario ya cambió el enlace", async () => {
