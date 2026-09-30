@@ -17,6 +17,8 @@ npm run dev
 
 Abre `http://localhost:3000`. La UI funciona sin credenciales con datos demo; PostgreSQL queda listo para persistencia posterior.
 
+`db:generate` no requiere base de datos y también se ejecuta automáticamente antes de `npm run build` (incluido el build de Vercel); `db:push` sí requiere un `DATABASE_URL` PostgreSQL válido en `.env` o en el entorno. Tras desplegar un esquema nuevo, aplica `npm run db:push` a la base configurada antes de esperar escrituras. Si la búsqueda oficial de Mercado Libre responde con ofertas inequívocas y `DATABASE_URL` está configurado, la API guarda un snapshot por oferta. Sin base de datos, o si guardar falla, la búsqueda sigue respondiendo sin historial. Los enlaces aportados manualmente no se persisten todavía.
+
 ## Validación
 
 ```bash

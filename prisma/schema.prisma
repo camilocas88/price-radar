@@ -1,6 +1,59 @@
-generator client { provider = "prisma-client-js" }
-datasource db { provider = "postgresql" }
+generator client {
+  provider = "prisma-client-js"
+}
 
-model Product { id String @id @default(cuid()) name String brand String? model String? offers Offer[] createdAt DateTime @default(now()) }
-model Offer { id String @id @default(cuid()) productId String product Product @relation(fields:[productId],references:[id]) source String classification String price Int shipping Int @default(0) taxes Int @default(0) currency String @default("COP") confidence Int updatedAt DateTime @updatedAt }
-model Watchlist { id String @id @default(cuid()) productId String targetPrice Int userId String @default("demo-user") }
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id           String          @id @default(cuid())
+  canonicalKey String?         @unique
+  name         String
+  brand        String?
+  model        String?
+  offers       Offer[]
+  snapshots    PriceSnapshot[]
+  createdAt    DateTime        @default(now())
+}
+
+model Offer {
+  id             String   @id @default(cuid())
+  productId      String
+  product        Product  @relation(fields: [productId], references: [id])
+  source         String
+  classification String
+  price          Int
+  shipping       Int      @default(0)
+  taxes          Int      @default(0)
+  currency       String   @default("COP")
+  confidence     Int
+  updatedAt      DateTime @updatedAt
+}
+
+model Watchlist {
+  id          String @id @default(cuid())
+  productId   String
+  targetPrice Int
+  userId      String @default("demo-user")
+}
+
+model PriceSnapshot {
+  id                   String   @id @default(cuid())
+  productId            String
+  product              Product  @relation(fields: [productId], references: [id])
+  offerId              String
+  source               String
+  price                Decimal  @db.Decimal(18, 2)
+  shipping             Decimal  @db.Decimal(18, 2)
+  taxes                Decimal  @db.Decimal(18, 2)
+  currency             String
+  priceConfirmation    String
+  shippingConfirmation String
+  taxConfirmation      String
+  availability         String
+  capturedAt           DateTime @default(now())
+
+  @@index([productId, capturedAt])
+  @@index([source, capturedAt])
+}

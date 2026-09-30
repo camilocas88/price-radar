@@ -11,12 +11,12 @@
     "Existe una prueba que verifica que el normalizador produce datos serializables coherentes con el esquema."
   ],
   "sdd": true,
-  "status": "claiming",
+  "status": "in_review",
   "roadmap_note": "Quick win derivado de la revisión de mejoras y primer paso hacia F-006 (Persistencia y auditoría) y F-010 (historial y alertas).",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-026.md",
   "branch": "feature/t-026-price-snapshots",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/17",
   "depends_on": [1, 2],
   "allowed_modules": [
     "docs/engineering/features/F-016.json",
@@ -33,6 +33,15 @@
     ".github/workflows/sync-merged-features.yml",
     "README.md"
   ],
-  "reviewed_by": null,
-  "evidence": []
+  "reviewed_by": "Codex (agente revisor independiente review_f016)",
+  "evidence": [
+    "npm run db:generate — OK",
+    "npm run lint — OK",
+    "npm run typecheck — OK",
+    "npm test — OK (79 pruebas)",
+    "npm run build — OK (prebuild genera Prisma Client)",
+    "npm run features:check — OK (20 features)",
+    "git diff --check — OK",
+    "Revisión independiente review_f016 — sin bloqueantes"
+  ]
 }
