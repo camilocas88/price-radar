@@ -11,13 +11,16 @@
     "Las consultas de texto siguen usando Mercado Libre y la navegación atrás/adelante conserva el modo correcto."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Corrección de usabilidad observada tras integrar F-008; no añade descubrimiento automático de otras tiendas.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-025.md",
   "branch": "feature/t-025-link-search-routing",
   "pr": "https://github.com/camilocas88/price-radar/pull/15",
-  "depends_on": [8, 15],
+  "depends_on": [
+    8,
+    15
+  ],
   "allowed_modules": [
     "docs/engineering/features/F-020.json",
     "docs/engineering/tasks/T-025.md",
@@ -44,6 +47,7 @@
     "npm run features:sync:test: 10 pruebas aprobadas.",
     "review_f020: hallazgo de import runtime de Vitest corregido; segunda revisión sin bloqueantes.",
     "CI PR #15: dos jobs validate aprobados para c182461 el 2026-09-30 UTC (1m1s y 58s).",
-    "PR #15 fusionada por el humano a main el 2026-09-30T03:19:23Z (503fa6a) antes del commit de handoff; PR #16 reconcilia este estado documental."
+    "PR #15 fusionada por el humano a main el 2026-09-30T03:19:23Z (503fa6a) antes del commit de handoff; PR #16 reconcilia este estado documental.",
+    "PR #15 fusionada a main el 2026-09-30T03:19:23Z; merge commit 503fa6a41ee381d46f6f710cb8bf1170e4f46324."
   ]
 }
