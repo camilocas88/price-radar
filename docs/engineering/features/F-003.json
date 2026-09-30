@@ -10,7 +10,7 @@
     "El protocolo distingue done de merged y reserva el merge al humano."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Habilita trabajo paralelo sin compartir el mismo archivo de estado ni working tree.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-003.md",
@@ -26,6 +26,7 @@
     "npm run typecheck: correcto.",
     "npm test: 5 pruebas aprobadas.",
     "npm run build: correcto.",
-    "Revisión independiente de review_t003: segunda revisión sin bloqueantes."
+    "Revisión independiente de review_t003: segunda revisión sin bloqueantes.",
+    "PR #2 fusionada por el humano el 2026-09-29 23:41:55 UTC; merge commit 05433584e14a1e01583193ef2ccc2e47fa40fdf2."
   ]
 }
