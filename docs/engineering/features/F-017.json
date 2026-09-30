@@ -11,12 +11,12 @@
     "Existe prueba unitaria del check de Mercado Libre con fetch mockeado."
   ],
   "sdd": true,
-  "status": "claiming",
+  "status": "in_progress",
   "roadmap_note": "Quick win derivado de la revisión de mejoras; anticipa parte de F-012 (observabilidad) sin bloquearlo.",
   "owner": "Claude",
   "ticket": "docs/engineering/tasks/T-020.md",
   "branch": "feature/t-020-sources-health",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/9",
   "depends_on": [2],
   "allowed_modules": [
     "docs/engineering/features/F-017.json",
