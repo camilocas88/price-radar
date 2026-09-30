@@ -10,7 +10,7 @@
     "Pruebas cubren valores ausentes y monedas diferentes."
   ],
   "sdd": true,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Roadmap 2. Puede planificarse en paralelo con F-004 si se acuerda el contrato compartido.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-021.md",
@@ -38,6 +38,7 @@
     "npm run features:check: 19 registros válidos.",
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas.",
-    "review_t021: hallazgo de envío gratis contradicho por detalle corregido; segunda revisión sin bloqueantes."
+    "review_t021: hallazgo de envío gratis contradicho por detalle corregido; segunda revisión sin bloqueantes.",
+    "CI PR #11: dos jobs validate aprobados el 2026-09-30 UTC contra main (41 s y 54 s)."
   ]
 }
