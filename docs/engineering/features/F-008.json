@@ -10,14 +10,36 @@
     "No automatiza login ni contenido restringido."
   ],
   "sdd": true,
-  "status": "pending",
-  "roadmap_note": "Roadmap 4–5. Alimenta el comparador y la extensión.",
-  "owner": null,
-  "ticket": null,
-  "branch": null,
-  "pr": null,
+  "status": "done",
+  "roadmap_note": "Roadmap 4–5. Primer flujo de comparación por URL pública aportada por el usuario; extracción JSON-LD acotada y entrada manual cuando falten datos.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-024.md",
+  "branch": "feature/t-024-compare-link",
+  "pr": "https://github.com/camilocas88/price-radar/pull/14",
   "depends_on": [5, 7],
-  "allowed_modules": [],
-  "reviewed_by": null,
-  "evidence": []
+  "allowed_modules": [
+    "docs/engineering/features/F-008.json",
+    "docs/engineering/tasks/T-024.md",
+    "src/lib/compare-link.ts",
+    "src/lib/compare-link.test.ts",
+    "src/app/api/compare-link/route.ts",
+    "src/app/api/compare-link/route.test.ts",
+    "src/app/components/CompareLinkSection.tsx",
+    "src/app/components/CompareLinkSection.test.ts",
+    "src/app/components/HomeExperience.tsx",
+    "src/app/components/SearchForm.tsx",
+    "README.md"
+  ],
+  "reviewed_by": "review_f008",
+  "evidence": [
+    "npm run lint: correcto.",
+    "npm run typecheck: correcto tras build; ejecución simultánea con build mostró carrera en .next/types, sin error de código.",
+    "npm test: 64 pruebas aprobadas en 11 archivos.",
+    "npm run build: correcto.",
+    "npm run features:check: 19 registros válidos.",
+    "npm run features:test: 6 pruebas aprobadas.",
+    "npm run features:sync:test: 10 pruebas aprobadas.",
+    "review_f008: revisión independiente y segunda pasada del límite de POST sin Content-Length, sin bloqueantes.",
+    "CI PR #14: dos jobs validate aprobados para 87f7206 el 2026-09-30 UTC (53 s y 1m6s)."
+  ]
 }

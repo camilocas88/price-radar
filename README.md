@@ -1,6 +1,6 @@
 # Radar Precio
 
-Radar de compras para Colombia. El MVP compara ofertas demo de un iPhone por precio real, disponibilidad y confianza. **No contiene integraciones comerciales reales ni scraping.**
+Radar de compras para Colombia. El MVP muestra una demo, intenta consultar la API oficial de Mercado Libre y permite comparar enlaces públicos aportados por usuarios. La búsqueda de Mercado Libre puede responder 403; en ese caso no se presentan ofertas demo como resultados reales.
 
 ## Ejecutar localmente
 
@@ -30,13 +30,16 @@ npm run build
 
 | Fuente | Estado MVP |
 | --- | --- |
-| Mercado Libre | API oficial de búsquedas (T-002); configurar `MERCADOLIBRE_ACCESS_TOKEN` si la plataforma lo exige |
+| Mercado Libre | API oficial de búsquedas (T-002); puede rechazar búsquedas con 403 incluso con credenciales |
+| Enlaces aportados | Páginas HTTPS de Mercado Libre, Alkosto, Ktronix, Éxito y Falabella; JSON-LD `Product` cuando sea accesible y campos confirmados manualmente por el usuario |
 | Éxito, Alkosto, Ktronix, Falabella, iShop, Mac Center | Demo/mock |
 | Amazon, eBay, AliExpress | Demo/mock de importación |
 | Instagram, Facebook, TikTok, WhatsApp | Solo enlace aportado por usuario |
 | APIs, afiliados, feeds autorizados | Pendiente |
 
 Los impuestos, conversión y entrega se etiquetan como estimados cuando no están confirmados. No se debe automatizar login, CAPTCHA, bloqueos o contenido contrario a los términos de una plataforma.
+
+El comparador de enlaces no requiere credenciales ni la disponibilidad de la API de Mercado Libre. Acepta dos o más enlaces en la sesión y ordena sus precios publicados en COP; no verifica automáticamente variantes, precio final, inventario, envío, impuestos ni garantía. Si la página no expone JSON-LD público, pide título y precio. Los aportes no se guardan ni se mezclan con resultados confirmados de API.
 
 ## Arquitectura y extensión
 

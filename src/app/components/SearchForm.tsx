@@ -43,6 +43,7 @@ export function SearchForm({ query, loading, error, onQueryChange, onSubmit }: S
       {error && (
         <p role="alert" className="mt-3 text-sm text-red-700">
           Fuente no disponible: {error} No se muestran ofertas demo como respuesta a esta búsqueda.
+          {" "}<a href="#comparar-enlaces" className="font-semibold underline">Puedes comparar enlaces de productos abajo.</a>
         </p>
       )}
     </>
