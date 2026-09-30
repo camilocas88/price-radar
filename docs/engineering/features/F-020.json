@@ -43,6 +43,7 @@
     "npm run features:test: 6 pruebas aprobadas.",
     "npm run features:sync:test: 10 pruebas aprobadas.",
     "review_f020: hallazgo de import runtime de Vitest corregido; segunda revisión sin bloqueantes.",
-    "CI PR #15: dos jobs validate aprobados para c182461 el 2026-09-30 UTC (1m1s y 58s)."
+    "CI PR #15: dos jobs validate aprobados para c182461 el 2026-09-30 UTC (1m1s y 58s).",
+    "PR #15 fusionada por el humano a main el 2026-09-30T03:19:23Z (503fa6a) antes del commit de handoff; PR #16 reconcilia este estado documental."
   ]
 }
