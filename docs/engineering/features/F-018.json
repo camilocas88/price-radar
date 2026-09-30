@@ -1,0 +1,34 @@
+{
+  "id": 18,
+  "name": "merged_status_sync",
+  "title": "Sincronizar automáticamente merged tras merge humano",
+  "description": "Un workflow verifica las PR de features done fusionadas a main y actualiza sus registros a merged sin requerir una segunda PR de mantenimiento.",
+  "plan": "docs/engineering/tasks/T-018.md",
+  "acceptance": [
+    "Solo se marca merged cuando GitHub confirma una PR fusionada específicamente a main y el registro estaba en done.",
+    "Una PR fusionada a otra rama, abierta o sin coincidencia exacta con el repositorio no modifica estados.",
+    "El workflow valida los cambios, usa permisos mínimos y no aprueba ni fusiona PR.",
+    "La sincronización es idempotente y recupera features done anteriores, incluido F-004."
+  ],
+  "sdd": true,
+  "status": "claiming",
+  "roadmap_note": "Mejora del loop de ingeniería: elimina PR de mantenimiento solo para cambiar done a merged.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-018.md",
+  "branch": "feature/t-018-merged-status-sync",
+  "pr": null,
+  "depends_on": [3],
+  "allowed_modules": [
+    "AGENTS.md",
+    "docs/engineering/FEATURES.md",
+    "docs/engineering/features/F-018.json",
+    "docs/engineering/tasks/T-018.md",
+    ".github/workflows/ci.yml",
+    ".github/workflows/sync-merged-features.yml",
+    "package.json",
+    "scripts/sync-merged-features.mjs",
+    "scripts/sync-merged-features.test.mjs"
+  ],
+  "reviewed_by": null,
+  "evidence": []
+}
