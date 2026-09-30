@@ -4,7 +4,10 @@ import { GET } from "./route";
 
 const request = () => new NextRequest("http://localhost/api/offers?query=iphone");
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
+});
 
 describe("GET /api/offers", () => {
   it("distingue una búsqueda válida sin resultados", async () => {
@@ -12,6 +15,21 @@ describe("GET /api/offers", () => {
     const response = await GET(request());
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ offers: [], source: "mercadolibre" });
+  });
+
+  it("conserva el enriquecimiento de ofertas cuando la fuente responde", async () => {
+    vi.stubEnv("MERCADOLIBRE_DEFAULT_ZIP_CODE", "");
+    const fetchMock = vi.fn().mockImplementation((url: URL | string) => {
+      if (String(url).includes("/sites/MCO/search")) {
+        return Promise.resolve(new Response(JSON.stringify({ results: [{ id: "MCO1", title: "Teléfono", price: 1000000, currency_id: "COP", permalink: "https://example.test/MCO1" }] }), { status: 200 }));
+      }
+      return Promise.resolve(new Response(JSON.stringify({ id: "MCO1", shipping: { free_shipping: true } }), { status: 200 }));
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const response = await GET(request());
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ offers: [{ id: "ml-MCO1", delivery: "Envío gratis confirmado por Mercado Libre" }], source: "mercadolibre" });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it("no confunde una respuesta incompleta con una búsqueda vacía", async () => {
