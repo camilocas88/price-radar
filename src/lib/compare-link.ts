@@ -66,6 +66,8 @@ function extractPrice(product: Record<string, unknown>): number | undefined {
   if (offers.length !== 1 || !offers[0] || typeof offers[0] !== "object") return undefined;
   const offer = offers[0] as Record<string, unknown>;
   if (offer.priceCurrency !== "COP") return undefined;
+  if (typeof offer.priceValidUntil === "string" && Date.parse(offer.priceValidUntil) < Date.now()) return undefined;
+  if (typeof offer.availability === "string" && /OutOfStock|Discontinued/i.test(offer.availability)) return undefined;
   const raw = offer.price;
   if (!(typeof raw === "number" || (typeof raw === "string" && /^\d+(?:\.\d+)?$/.test(raw)))) return undefined;
   const price = Number(raw);
@@ -109,6 +111,53 @@ async function readLimitedHtml(response: Response): Promise<string | null> {
     return html + decoder.decode();
   } finally {
     await reader.cancel().catch(() => undefined);
+  }
+}
+
+export type CatalogPageOffer = { title: string; price: number; seller?: string };
+
+export function extractCatalogOffersJsonLd(html: string, now = new Date()): CatalogPageOffer[] {
+  for (const script of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)) {
+    if (!/\btype\s*=\s*["']application\/ld\+json["']/i.test(script[1])) continue;
+    try {
+      const products = findProducts(JSON.parse(script[2]));
+      if (products.length !== 1) continue;
+      const product = products[0];
+      const title = typeof product.name === "string" ? product.name.trim().slice(0, 200) : "";
+      if (!title) continue;
+      const rawOffers = Array.isArray(product.offers) ? product.offers : product.offers ? [product.offers] : [];
+      const offers = rawOffers.flatMap((raw): CatalogPageOffer[] => {
+        if (!raw || typeof raw !== "object") return [];
+        const offer = raw as Record<string, unknown>;
+        if (offer.priceCurrency !== "COP") return [];
+        if (typeof offer.availability === "string" && /OutOfStock|Discontinued/i.test(offer.availability)) return [];
+        if (typeof offer.priceValidUntil === "string" && offer.priceValidUntil.trim() && (!Number.isFinite(Date.parse(offer.priceValidUntil)) || Date.parse(offer.priceValidUntil) < now.getTime())) return [];
+        const price = Number(offer.price);
+        if (!Number.isFinite(price) || price <= 0 || !/^\d+(?:\.\d+)?$/.test(String(offer.price))) return [];
+        const seller = typeof offer.seller === "string" ? offer.seller : offer.seller && typeof offer.seller === "object"
+          ? (offer.seller as Record<string, unknown>).name : undefined;
+        return [{ title, price, ...(typeof seller === "string" && seller.trim() ? { seller: seller.trim().slice(0, 100) } : {}) }];
+      });
+      if (offers.length > 0) return offers;
+    } catch {
+      // Only structured product data is accepted.
+    }
+  }
+  return [];
+}
+
+export async function inspectCatalogLink(input: unknown, fetchImpl: typeof fetch = fetch, now = new Date()): Promise<{ url: string; store: string; offers: CatalogPageOffer[] }> {
+  const { url, store } = validateCompareUrl(input);
+  try {
+    const response = await fetchImpl(url, {
+      method: "GET", redirect: "manual", credentials: "omit",
+      headers: { Accept: "text/html" }, signal: AbortSignal.timeout(5000), cache: "no-store",
+    });
+    if (!response.ok || !response.headers.get("content-type")?.toLowerCase().includes("text/html")) return { url, store, offers: [] };
+    const html = await readLimitedHtml(response);
+    return { url, store, offers: html === null ? [] : extractCatalogOffersJsonLd(html, now) };
+  } catch {
+    return { url, store, offers: [] };
   }
 }
 

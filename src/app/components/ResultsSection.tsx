@@ -2,7 +2,7 @@
 
 import { Bell, SlidersHorizontal } from "lucide-react";
 import type { Offer } from "@/lib/offers";
-import type { ReviewItem, SearchStatus } from "@/app/hooks/useOfferSearch";
+import type { ReviewItem, SearchStatus, SourceState, UnpricedLink } from "@/app/hooks/useOfferSearch";
 import { demoProduct } from "../../lib/demo-data";
 import { OfferCard } from "./OfferCard";
 import { SkeletonList } from "./SkeletonList";
@@ -13,6 +13,8 @@ type ResultsSectionProps = {
   offers: Offer[];
   needsReview: ReviewItem[];
   excludedCount: number;
+  sources?: SourceState[];
+  unpriced?: UnpricedLink[];
   onlyVerified: boolean;
   watching: boolean;
   onToggleVerified: (value: boolean) => void;
@@ -25,6 +27,8 @@ export function ResultsSection({
   offers,
   needsReview,
   excludedCount,
+  sources = [],
+  unpriced = [],
   onlyVerified,
   watching,
   onToggleVerified,
@@ -37,17 +41,17 @@ export function ResultsSection({
   const resultLabel = isDemo
     ? "RESULTADOS DEMO"
     : isLive
-      ? "MERCADO LIBRE · RESULTADOS EN TIEMPO REAL"
+      ? "PRODUCTOS EN TIENDAS · PRECIOS PUBLICADOS"
       : isLoading
-        ? "CONSULTANDO MERCADO LIBRE"
+        ? "CONSULTANDO FUENTES"
         : "FUENTE NO DISPONIBLE";
   const description = isDemo
     ? "256 GB · Negro titanio · Nuevo · Bogotá"
     : isLive
-      ? "El precio es publicado. Envío, garantía y disponibilidad solo se afirman cuando la API los expone."
+      ? "Productos relacionados ordenados por precio publicado; pueden ser modelos distintos. Verifica cada variante, envío y cargos en la tienda."
       : isLoading
-        ? "Esperando respuesta de la fuente oficial."
-        : "Mercado Libre no respondió con ofertas utilizables; vuelve a intentar cuando la fuente esté disponible.";
+        ? "Buscando páginas de producto y verificando precios publicados."
+        : "No hay una fuente de búsqueda disponible en este momento.";
 
   return (
     <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8">
@@ -89,6 +93,11 @@ export function ResultsSection({
           </p>
         </aside>
         <div className="space-y-3">
+          {(isLive || status === "unavailable") && sources.length > 0 && (
+            <div role="status" className="rounded-2xl border border-[#dbe6de] bg-white p-4 text-sm text-[#526b5e]">
+              {sources.map((source) => <p key={source.source}>{source.source === "web" ? "Búsqueda web" : "Mercado Libre"}: {source.detail}</p>)}
+            </div>
+          )}
           {isLoading && <SkeletonList count={3} />}
           {isLive && needsReview.length > 0 && (
             <div role="status" className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-950">
@@ -106,7 +115,9 @@ export function ResultsSection({
           )}
           {isLive && offers.length === 0 && needsReview.length === 0 && excludedCount === 0 && (
             <p className="rounded-2xl border border-[#dbe6de] bg-white p-5 text-sm text-[#637a6e]">
-              No encontramos ofertas comparables con precio en COP para esta búsqueda.
+              {sources.some((source) => source.source === "web" && source.status === "no_prices")
+                ? "Se encontraron páginas de tiendas, pero no se pudo verificar un precio vigente en COP. Puedes abrir un enlace de producto y revisarlo manualmente."
+                : "No encontramos productos con precio verificado en COP para esta búsqueda."}
             </p>
           )}
           {status === "unavailable" && (
@@ -115,8 +126,17 @@ export function ResultsSection({
             </p>
           )}
           {!isLoading && offers.map((offer, index) => (
-            <OfferCard key={offer.id} offer={offer} highlighted={index === 0} />
+            <OfferCard key={offer.id} offer={offer} highlighted={isDemo && index === 0} />
           ))}
+          {isLive && unpriced.length > 0 && (
+            <div className="rounded-2xl border border-[#dbe6de] bg-white p-5 text-sm">
+              <p className="font-semibold">Páginas encontradas sin precio verificado</p>
+              <p className="mt-1 text-[#637a6e]">Revísalas en la tienda; no entran al orden por precio.</p>
+              <ul className="mt-3 list-disc space-y-1 pl-5">
+                {unpriced.slice(0, 5).map((item) => <li key={item.url}><a className="text-[#14532d] underline" href={item.url} target="_blank" rel="noreferrer">{item.store}</a></li>)}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -1,30 +1,31 @@
 {
   "id": 22,
   "name": "public_catalog_search",
-  "title": "Búsqueda multi-fuente desde catálogos públicos acotados",
-  "description": "Hacer que la búsqueda por texto consulte productos públicos concretos de Éxito, Alkosto, Mac Center e iShop mediante datos estructurados, además de Mercado Libre, sin mostrar precios vencidos ni depender del permiso de esa API.",
+  "title": "Descubrimiento web de productos en varias tiendas",
+  "description": "Buscar cualquier categoría de producto mediante una API oficial de búsqueda web, descubrir páginas de tiendas colombianas permitidas y mostrar precios publicados en datos estructurados, sin depender de Mercado Libre ni limitarse a iPhones.",
   "plan": "README.md#roadmap",
   "acceptance": [
-    "Una respuesta 403 de Mercado Libre no impide mostrar ofertas reales y comparables de otras fuentes disponibles.",
-    "Éxito aporta ofertas desde JSON-LD Product/Offer público, con vendedor y procedencia; Alkosto usa microdatos solo si el precio está vigente.",
-    "Los precios vencidos, productos ambiguos o tiendas bloqueadas no se clasifican como ofertas actuales y su estado es visible.",
-    "El catálogo de URLs es limitado y explícito, la consulta está acotada y no se inventan precios ni se automatiza login o redirecciones."
+    "Una búsqueda libre como carpas descubre páginas de productos de varias tiendas sin URLs fijadas en código ni restricción a teléfonos.",
+    "Un 403 de Mercado Libre no oculta los resultados obtenidos de otras fuentes; se informa el estado parcial por fuente.",
+    "Solo se muestran precios COP vigentes extraídos de Product/Offer estructurado; cada resultado enlaza el producto y muestra su título y tienda.",
+    "Una búsqueda amplia muestra productos relacionados sin afirmar que sean variantes idénticas ni resaltar un ganador por precio total desconocido.",
+    "Sin clave de búsqueda web se informa la configuración faltante y no se presentan demos como resultados reales; URLs y lecturas están acotadas por allowlist, tiempo y bytes."
   ],
   "sdd": true,
-  "status": "claiming",
-  "roadmap_note": "Primer paso real de búsqueda multi-fuente sin API de descubrimiento: cobertura curada y limitada; nuevos productos requieren enlaces/feeds autorizados.",
+  "status": "done",
+  "roadmap_note": "Descubrimiento con Brave Search API configurable; requiere clave del propietario. El precio publicado no incluye envío o impuestos no informados.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-029.md",
   "branch": "feature/t-029-public-catalog-search",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/21",
   "depends_on": [5, 7, 21],
   "allowed_modules": [
     "docs/engineering/features/F-022.json",
     "docs/engineering/tasks/T-029.md",
     "src/lib/public-catalog.ts",
     "src/lib/public-catalog.test.ts",
-    "src/lib/normalize.ts",
-    "src/lib/normalize.test.ts",
+    "src/lib/compare-link.ts",
+    "src/lib/compare-link.test.ts",
     "src/app/api/offers/route.ts",
     "src/app/api/offers/route.test.ts",
     "src/app/hooks/useOfferSearch.ts",
@@ -32,8 +33,18 @@
     "src/app/components/Hero.tsx",
     "src/app/components/ResultsSection.tsx",
     "src/app/components/ResultsSection.test.ts",
-    "src/app/components/HomeExperience.tsx"
+    "src/app/components/HomeExperience.tsx",
+    "src/app/components/OfferCard.tsx",
+    ".env.example"
   ],
-  "reviewed_by": null,
-  "evidence": []
+  "reviewed_by": "Codex (agente revisor independiente review_f022)",
+  "evidence": [
+    "npm run lint — OK",
+    "npm run typecheck — OK",
+    "npm test — OK (96 pruebas)",
+    "npm run build — OK",
+    "npm run features:check — OK (22 features)",
+    "Revisión independiente review_f022 — tres hallazgos corregidos y segunda revisión sin bloqueantes",
+    "Búsqueda carpas con clave Brave real — pendiente de clave del propietario; no se afirma verificación en vivo"
+  ]
 }

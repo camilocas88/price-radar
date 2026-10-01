@@ -20,14 +20,14 @@ export function Hero({ status, searchedQuery, offersCount }: HeroProps) {
     : isLive
       ? "Resultados en tiempo real"
       : status === "loading"
-        ? "Consultando fuente oficial"
+        ? "Consultando fuentes"
         : "Fuente temporalmente no disponible";
   const sourceLabel = isLink
     ? "Enlace público"
     : isDemo
     ? "Demo"
     : isLive
-      ? "Mercado Libre"
+      ? "Varias tiendas"
       : status === "loading"
         ? "Consultando"
         : "No disponible";
@@ -39,7 +39,7 @@ export function Hero({ status, searchedQuery, offersCount }: HeroProps) {
           <Sparkles size={14} /> Radar de compras para Colombia
         </p>
         <h1 className="max-w-3xl text-5xl font-semibold leading-[.98] tracking-[-.05em] sm:text-6xl">
-          Encuentra la mejor compra. <span className="text-[#197243]">No solo el menor precio.</span>
+          Explora precios de productos. <span className="text-[#197243]">Verifica cuál te conviene.</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-8 text-[#557064]">
           Comparamos precio publicado, entrega, garantía y señales de confianza sin ocultar lo que no está confirmado.
@@ -49,7 +49,7 @@ export function Hero({ status, searchedQuery, offersCount }: HeroProps) {
         <p className="text-sm text-green-100">{summaryHeadline}</p>
         <p className="mt-2 text-2xl font-medium">{displayQuery}</p>
         <div className="mt-5 flex justify-between border-t border-white/15 pt-4 text-sm">
-          <span>{isLink ? "Estado" : "Ofertas comparadas"}</span>
+          <span>{isLink ? "Estado" : "Productos encontrados"}</span>
           <b>{isLink ? "Sin verificar" : offersCount}</b>
         </div>
         <div className="mt-2 flex justify-between text-sm">

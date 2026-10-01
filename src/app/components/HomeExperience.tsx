@@ -37,6 +37,8 @@ export function HomeExperience() {
           offers={search.filteredOffers}
           needsReview={search.needsReview}
           excludedCount={search.excludedCount}
+          sources={search.sources}
+          unpriced={search.unpriced}
           onlyVerified={search.onlyVerified}
           watching={search.watching}
           onToggleVerified={search.setOnlyVerified}
@@ -44,7 +46,7 @@ export function HomeExperience() {
         />
       )}
       <footer className="border-t border-[#dbe6de] px-5 py-8 text-center text-xs text-[#637a6e]">
-        Radar Precio · Mercado Libre mediante API oficial o enlaces aportados · Colombia
+        Radar Precio · Búsqueda web y Mercado Libre; precios publicados por las tiendas · Colombia
       </footer>
     </main>
   );

@@ -18,7 +18,9 @@ describe("GET /api/offers", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ results: [] }), { status: 200 })));
     const response = await GET(request());
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ offers: [], source: "mercadolibre", needsReview: [], excludedCount: 0 });
+    expect(await response.json()).toMatchObject({ offers: [], needsReview: [], excludedCount: 0, sources: [
+      { source: "web", status: "not_configured" }, { source: "mercadolibre", status: "ok" },
+    ] });
   });
 
   it("conserva el enriquecimiento de ofertas cuando la fuente responde", async () => {
@@ -36,7 +38,7 @@ describe("GET /api/offers", () => {
       id: "ml-MCO1", delivery: "Envío gratis confirmado por Mercado Libre",
       source: "mercadolibre", currency: "COP", availability: "unknown",
       priceConfirmation: "confirmed", shippingConfirmation: "confirmed", taxConfirmation: "unknown",
-    }], source: "mercadolibre" });
+    }], sources: [{ source: "web", status: "not_configured" }, { source: "mercadolibre", status: "ok" }] });
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(saveOfferSnapshots).toHaveBeenCalledWith("iPhone 17 Pro Max 256 GB nuevo", [expect.objectContaining({ id: "ml-MCO1" })]);
   });
@@ -106,7 +108,7 @@ describe("GET /api/offers", () => {
     const response = await GET(request("iPhone 17 Pro Max 256 GB nuevo"));
     expect(response.status).toBe(200);
     expect((await response.json()).offers).toHaveLength(1);
-    expect(warn).toHaveBeenCalledWith("price_snapshot_write_failed", { source: "mercadolibre", offerCount: 1 });
+    expect(warn).toHaveBeenCalledWith("price_snapshot_write_failed", { source: "multi", offerCount: 1 });
     warn.mockRestore();
   });
 
@@ -122,5 +124,23 @@ describe("GET /api/offers", () => {
     const response = await GET(request());
     expect(response.status).toBe(502);
     expect(await response.json()).toMatchObject({ code: "SOURCE_UNAVAILABLE" });
+  });
+
+  it("mantiene productos de tiendas cuando Mercado Libre responde 403", async () => {
+    vi.stubEnv("BRAVE_SEARCH_API_KEY", "test-key");
+    vi.stubGlobal("fetch", vi.fn(async (input: URL | string) => {
+      const url = String(input);
+      if (url.includes("api.search.brave.com")) return Response.json({ web: { results: [
+        { url: "https://www.exito.com/carpa/p" }, { url: "https://www.alkosto.com/carpa/p" },
+      ] } });
+      if (url.includes("api.mercadolibre.com")) return new Response(null, { status: 403 });
+      const name = url.includes("exito.com") ? "Carpa familiar" : "Carpa de camping";
+      return new Response(`<script type="application/ld+json">{"@type":"Product","name":"${name}","offers":{"priceCurrency":"COP","price":"159900"}}</script>`, { headers: { "content-type": "text/html" } });
+    }));
+    const response = await GET(request("carpas"));
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ offers: [
+      { store: "Éxito", price: 159900 }, { store: "Alkosto", price: 159900 },
+    ], sources: [{ source: "web", status: "ok" }, { source: "mercadolibre", status: "unavailable" }] });
   });
 });
