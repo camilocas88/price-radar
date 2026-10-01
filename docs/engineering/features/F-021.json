@@ -11,12 +11,12 @@
     "Se añaden al menos dos dominios de tiendas reales con enlaces públicos, sin saltar bloqueos ni inventar precios."
   ],
   "sdd": true,
-  "status": "claiming",
+  "status": "in_review",
   "roadmap_note": "Ampliación multi-fuente del flujo de enlaces F-008/F-020; no equivale a búsqueda web automática ni a una API comercial sin credenciales.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-028.md",
   "branch": "feature/t-028-multi-source-links",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/20",
   "depends_on": [8, 20],
   "allowed_modules": [
     "docs/engineering/features/F-021.json",
@@ -28,6 +28,14 @@
     "src/app/components/CompareLinkSection.tsx",
     "src/app/components/CompareLinkSection.test.ts"
   ],
-  "reviewed_by": null,
-  "evidence": []
+  "reviewed_by": "Codex (agente revisor independiente review_f021)",
+  "evidence": [
+    "npm run lint — OK",
+    "npm run typecheck — OK",
+    "npm test — OK (88 pruebas)",
+    "npm run build — OK",
+    "npm run features:check — OK (21 features)",
+    "git diff --check — OK",
+    "Revisión independiente review_f021 — sin bloqueantes tras correcciones"
+  ]
 }

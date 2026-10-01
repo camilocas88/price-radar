@@ -29,6 +29,14 @@ async function change(input: HTMLInputElement, value: string) {
   });
 }
 
+async function changeTextarea(input: HTMLTextAreaElement, value: string) {
+  await act(async () => {
+    const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value")!.set!;
+    setter.call(input, value);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+}
+
 async function submit(form: HTMLFormElement) {
   await act(async () => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
 }
@@ -40,14 +48,15 @@ describe("CompareLinkSection", () => {
       return new Response(JSON.stringify({ url, store: "Mercado Libre", extraction: "manual", missingFields: ["title", "price"], notice: "Completa los datos." }), { status: 200 });
     });
     vi.stubGlobal("fetch", fetchMock);
+    await change(container.querySelector('input[placeholder="iPhone 17 Pro Max 256 GB nuevo"]') as HTMLInputElement, "iPhone 17 Pro Max 256 GB nuevo");
     const urlInput = container.querySelector('input[type="url"]') as HTMLInputElement;
     for (const [url, title, price] of [
-      ["https://www.mercadolibre.com.co/uno", "iPhone 256 GB", "2000000"],
-      ["https://www.mercadolibre.com.co/dos", "iPhone 256 GB", "1500000"],
+      ["https://www.mercadolibre.com.co/uno", "iPhone 17 Pro Max 256 GB nuevo", "2000000"],
+      ["https://www.mercadolibre.com.co/dos", "iPhone 17 Pro Max 256 GB nuevo", "1500000"],
     ]) {
       await change(urlInput, url);
       await submit(container.querySelector("form")!);
-      const form = container.querySelectorAll("form")[1];
+      const form = container.querySelectorAll("form")[2];
       expect(form).toBeTruthy();
       const inputs = form.querySelectorAll("input");
       await change(inputs[0], title);
@@ -85,7 +94,78 @@ describe("CompareLinkSection", () => {
     await submit(container.querySelector("form")!);
     await change(urlInput, "https://www.alkosto.com/dos");
     await act(async () => resolve(new Response(JSON.stringify({ url: "https://www.alkosto.com/uno", store: "Alkosto", extraction: "manual", missingFields: ["title", "price"] }))));
-    expect(container.querySelectorAll("form")).toHaveLength(1);
+    expect(container.querySelectorAll("form")).toHaveLength(2);
     expect(urlInput.value).toBe("https://www.alkosto.com/dos");
+  });
+
+  it("revisa un lote de dos tiendas y excluye una variante distinta del menor", async () => {
+    const first = "https://mac-center.com/products/iphone-17";
+    const second = "https://co.tiendasishop.com/products/iphone-16";
+    vi.stubGlobal("fetch", vi.fn(async (_: string, options: RequestInit) => {
+      const { url } = JSON.parse(String(options.body)) as { url: string };
+      return new Response(JSON.stringify({ url, store: url === first ? "Mac Center" : "iShop Colombia", extraction: "json_ld", missingFields: [],
+        title: url === first ? "iPhone 17 Pro Max 256 GB nuevo" : "iPhone 16 Pro Max 256 GB nuevo", price: url === first ? 6000000 : 4000000,
+      }), { status: 200 });
+    }));
+    await change(container.querySelector('input[placeholder="iPhone 17 Pro Max 256 GB nuevo"]') as HTMLInputElement, "iPhone 17 Pro Max 256 GB nuevo");
+    await changeTextarea(container.querySelector("textarea")!, `${first}\n${second}`);
+    await submit(container.querySelectorAll("form")[1]);
+    expect(container.textContent).toContain("Confirma el anuncio de Mac Center");
+    await submit(container.querySelectorAll("form")[2]);
+    expect(container.textContent).toContain("Confirma el anuncio de iShop Colombia");
+    await submit(container.querySelectorAll("form")[2]);
+    expect(container.textContent).toContain("Enlaces aportados (2)");
+    expect(container.textContent).toContain("1 comparables y 1 por revisar");
+    expect(container.textContent).toContain("VARIANTE DISTINTA");
+    expect(container.textContent).not.toContain("MENOR PRECIO ENTRE TUS ENLACES");
+    expect(container.textContent).toContain("JSON-LD público detectado; datos confirmados por ti");
+    expect(container.textContent).not.toContain("Precio leído de JSON-LD");
+  });
+
+  it("continúa el lote si una tienda falla y limita la cantidad de enlaces", async () => {
+    const first = "https://mac-center.com/products/iphone-17";
+    const second = "https://co.tiendasishop.com/products/iphone-17";
+    const fetchMock = vi.fn(async (_: string, options: RequestInit) => {
+      const { url } = JSON.parse(String(options.body)) as { url: string };
+      return url === first
+        ? new Response(JSON.stringify({ error: "Enlace no disponible" }), { status: 400 })
+        : new Response(JSON.stringify({ url, store: "iShop Colombia", extraction: "manual", missingFields: ["title", "price"] }), { status: 200 });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const textarea = container.querySelector("textarea")!;
+    await changeTextarea(textarea, first);
+    await submit(container.querySelectorAll("form")[1]);
+    expect(container.textContent).toContain("entre 2 y 6 enlaces");
+    expect(fetchMock).not.toHaveBeenCalled();
+    await changeTextarea(textarea, `${first}\n${second}`);
+    await submit(container.querySelectorAll("form")[1]);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(container.textContent).toContain("Enlace no disponible");
+    expect(container.textContent).toContain("Confirma el anuncio de iShop Colombia");
+  });
+
+  it("rechaza URLs equivalentes por fragmento antes de consultar", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    await changeTextarea(container.querySelector("textarea")!, "https://mac-center.com/products/iphone#uno\nhttps://mac-center.com/products/iphone#dos");
+    await submit(container.querySelectorAll("form")[1]);
+    expect(container.textContent).toContain("entre 2 y 6 enlaces distintos");
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("muestra progreso durante el lote, antes de terminar todas las consultas", async () => {
+    let resolveSecond!: (response: Response) => void;
+    let calls = 0;
+    vi.stubGlobal("fetch", vi.fn(async (_: string, options: RequestInit) => {
+      calls += 1;
+      const { url } = JSON.parse(String(options.body)) as { url: string };
+      if (calls === 2) return new Promise<Response>((resolve) => { resolveSecond = resolve; });
+      return new Response(JSON.stringify({ url, store: "Mac Center", extraction: "manual", missingFields: ["title", "price"] }), { status: 200 });
+    }));
+    await changeTextarea(container.querySelector("textarea")!, "https://mac-center.com/products/uno\nhttps://co.tiendasishop.com/products/dos");
+    await submit(container.querySelectorAll("form")[1]);
+    expect(container.querySelector('[role="status"]')?.textContent).toContain("Revisados 1/2");
+    await act(async () => resolveSecond(new Response(JSON.stringify({ url: "https://co.tiendasishop.com/products/dos", store: "iShop Colombia", extraction: "manual", missingFields: ["title", "price"] }), { status: 200 })));
+    expect(container.querySelector('[role="status"]')?.textContent).toContain("Revisados 2/2");
   });
 });

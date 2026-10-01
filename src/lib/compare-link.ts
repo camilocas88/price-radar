@@ -9,6 +9,9 @@ const STORES: Record<string, string> = {
   "www.exito.com": "Éxito",
   "falabella.com.co": "Falabella",
   "www.falabella.com.co": "Falabella",
+  "mac-center.com": "Mac Center",
+  "www.mac-center.com": "Mac Center",
+  "co.tiendasishop.com": "iShop Colombia",
 };
 
 const MAX_URL_LENGTH = 2048;
@@ -39,7 +42,7 @@ export function validateCompareUrl(input: unknown): { url: string; store: string
   }
   const store = STORES[parsed.hostname.toLowerCase()];
   if (parsed.protocol !== "https:" || !store || parsed.username || parsed.password || parsed.port) {
-    throw new InvalidCompareUrl("Usa un enlace HTTPS de Mercado Libre, Alkosto, Ktronix, Éxito o Falabella, sin usuario ni puerto personalizado.");
+    throw new InvalidCompareUrl("Usa un enlace HTTPS de Mercado Libre, Alkosto, Ktronix, Éxito, Falabella, Mac Center o iShop Colombia, sin usuario ni puerto personalizado.");
   }
   parsed.hash = "";
   return { url: parsed.toString(), store };
