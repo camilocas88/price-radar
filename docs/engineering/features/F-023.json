@@ -11,13 +11,15 @@
     "Gates, revisión ajena, CI y handoff antes del merge humano."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Corrección puntual de F-022 descubierta en smoke real tras configurar Brave.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-030.md",
   "branch": "feature/t-030-brave-country-fix",
   "pr": "https://github.com/camilocas88/price-radar/pull/22",
-  "depends_on": [22],
+  "depends_on": [
+    22
+  ],
   "allowed_modules": [
     "docs/engineering/features/F-023.json",
     "docs/engineering/tasks/T-030.md",
@@ -33,6 +35,7 @@
     "npm test — OK (105 pruebas)",
     "npm run build — OK",
     "npm run features:check — OK (23 features)",
-    "Revisión independiente review_f023 — sin bloqueantes; AGENTS.md generado por next dev excluido del diff"
+    "Revisión independiente review_f023 — sin bloqueantes; AGENTS.md generado por next dev excluido del diff",
+    "PR #22 fusionada a main el 2026-10-01T02:12:42Z; merge commit 963875306117f628238bf7b8d8b84eeff3e451b8."
   ]
 }
