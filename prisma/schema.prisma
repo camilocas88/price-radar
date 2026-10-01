@@ -56,4 +56,5 @@ model PriceSnapshot {
 
   @@index([productId, capturedAt])
   @@index([source, capturedAt])
+  @@unique([productId, source, offerId, capturedAt])
 }

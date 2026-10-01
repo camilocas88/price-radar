@@ -15,9 +15,13 @@ npm run db:push
 npm run dev
 ```
 
+La base local usa PostgreSQL 16, publica el puerto solo en `127.0.0.1:5432` y tiene healthcheck. La URL de `.env.example` es únicamente de desarrollo; no reutilices esa contraseña en producción. En Docker Desktop puedes comprobar el estado con `docker compose ps`. Mantén `.env`/`.env.local` fuera de Git.
+
 Abre `http://localhost:3000`. La UI funciona sin credenciales con datos demo; PostgreSQL queda listo para persistencia posterior.
 
-`db:generate` no requiere base de datos y también se ejecuta automáticamente antes de `npm run build` (incluido el build de Vercel); `db:push` sí requiere un `DATABASE_URL` PostgreSQL válido en `.env` o en el entorno. Tras desplegar un esquema nuevo, aplica `npm run db:push` a la base configurada antes de esperar escrituras. Si la búsqueda oficial de Mercado Libre responde con ofertas inequívocas y `DATABASE_URL` está configurado, la API guarda un snapshot por oferta. Sin base de datos, o si guardar falla, la búsqueda sigue respondiendo sin historial. Los enlaces aportados manualmente no se persisten todavía.
+`db:generate` no requiere base de datos y también se ejecuta automáticamente antes de `npm run build` (incluido el build de Vercel); `db:push` sí requiere un `DATABASE_URL` PostgreSQL válido en `.env` o en el entorno. `db:push` aquí es para desarrollo; antes de cambiar un esquema con datos existentes o producción, revisa la migración y haz respaldo. Si la búsqueda oficial de Mercado Libre responde con ofertas inequívocas y `DATABASE_URL` está configurado, la API guarda un snapshot por oferta. Sin base de datos, o si guardar falla, la búsqueda sigue respondiendo sin historial. Los enlaces aportados manualmente no se persisten todavía.
+
+`GET /api/offer-history?query=iPhone%2017%20Pro%20Max%20256%20GB%20nuevo&mode=current` devuelve las últimas capturas por publicación de esa variante, hasta `limit` (20 por defecto, máximo 50); `truncated` indica si hay más publicaciones. Con `mode=history`, `limit=1..50` y `cursor` opcional devuelve capturas anteriores y `nextCursor`. Los importes decimales son cadenas para conservar precisión. Una variante ambigua responde 400 y una base no configurada responde 503; esto no convierte ofertas antiguas en resultados de búsqueda actual.
 
 ## Validación
 

@@ -10,12 +10,12 @@
     "La lectura actual y la histórica tienen contratos explícitos."
   ],
   "sdd": true,
-  "status": "claiming",
+  "status": "in_review",
   "roadmap_note": "Roadmap 2–3. Persistencia verificable y auditoría sobre F-016; la diversificación de fuentes se tratará en un feature separado.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-027.md",
   "branch": "feature/t-027-offer-audit-impl",
-  "pr": null,
+  "pr": "https://github.com/camilocas88/price-radar/pull/19",
   "depends_on": [5],
   "allowed_modules": [
     "docs/engineering/features/F-006.json",
@@ -28,8 +28,18 @@
     "src/app/api/offer-history/route.ts",
     "src/app/api/offer-history/route.test.ts",
     "docker-compose.yml",
+    "package.json",
+    "scripts/db-smoke.mjs",
     "README.md"
   ],
   "reviewed_by": null,
-  "evidence": []
+  "evidence": [
+    "npm run lint — OK",
+    "npm run typecheck — OK",
+    "npm test — OK (86 pruebas)",
+    "npm run build — OK",
+    "npm run features:check — OK (20 features)",
+    "npm run db:smoke — OK contra PostgreSQL local; reintento deduplicado y captura posterior conservada",
+    "git diff --check — OK"
+  ]
 }

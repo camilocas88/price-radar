@@ -24,19 +24,25 @@ export type SnapshotBatch = {
 
 export type SnapshotWriter = {
   upsertProduct: (product: SnapshotBatch["product"]) => Promise<string>;
-  insertSnapshots: (productId: string, snapshots: SnapshotInput[]) => Promise<void>;
+  insertSnapshots: (productId: string, snapshots: SnapshotInput[]) => Promise<number>;
 };
 
 let prisma: PrismaClient | null = null;
 
-function databaseWriter(databaseUrl: string): SnapshotWriter {
+export function getSnapshotDatabase(databaseUrl = process.env.DATABASE_URL?.trim()): PrismaClient | null {
+  if (!databaseUrl) return null;
   if (!prisma) {
     const adapter = new PrismaPg({ connectionString: databaseUrl, connectionTimeoutMillis: 2000 });
     prisma = new PrismaClient({ adapter });
   }
+  return prisma;
+}
+
+function databaseWriter(databaseUrl: string): SnapshotWriter {
+  const database = getSnapshotDatabase(databaseUrl)!;
   return {
     async upsertProduct(product) {
-      const row = await prisma!.product.upsert({
+      const row = await database.product.upsert({
         where: { canonicalKey: product.canonicalKey },
         create: product,
         update: {},
@@ -44,7 +50,8 @@ function databaseWriter(databaseUrl: string): SnapshotWriter {
       return row.id;
     },
     async insertSnapshots(productId, snapshots) {
-      await prisma!.priceSnapshot.createMany({ data: snapshots.map((snapshot) => ({ ...snapshot, productId })) });
+      const result = await database.priceSnapshot.createMany({ data: snapshots.map((snapshot) => ({ ...snapshot, productId })), skipDuplicates: true });
+      return result.count;
     },
   };
 }
@@ -54,11 +61,18 @@ function decimal(value: number): string {
   return value.toFixed(2);
 }
 
-export function buildSnapshotBatch(query: string, offers: OfferContract[]): SnapshotBatch | null {
-  if (offers.length === 0) return null;
+export function canonicalProductKey(query: string): string | null {
   const identity = normalizeProduct(query);
   if (!identity.brand || !identity.model || identity.storageGb === undefined || !identity.condition || identity.accessory) return null;
-  const canonicalKey = `${identity.brand.toLowerCase()}|${identity.model}|${identity.storageGb}|${identity.condition}`;
+  return `${identity.brand.toLowerCase()}|${identity.model}|${identity.storageGb}|${identity.condition}`;
+}
+
+export function buildSnapshotBatch(query: string, offers: OfferContract[]): SnapshotBatch | null {
+  if (offers.length === 0) return null;
+  const canonicalKey = canonicalProductKey(query);
+  if (!canonicalKey) return null;
+  const identity = normalizeProduct(query);
+  if (!identity.brand || !identity.model) return null;
   return {
     product: { canonicalKey, name: query.trim(), brand: identity.brand, model: identity.model },
     snapshots: offers.map((offer) => ({
@@ -85,6 +99,5 @@ export async function saveOfferSnapshots(query: string, offers: OfferContract[],
   if (!batch) return 0;
   const destination = writer ?? databaseWriter(databaseUrl!);
   const productId = await destination.upsertProduct(batch.product);
-  await destination.insertSnapshots(productId, batch.snapshots);
-  return batch.snapshots.length;
+  return destination.insertSnapshots(productId, batch.snapshots);
 }
