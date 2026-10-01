@@ -11,6 +11,19 @@
     "Gates, revisión ajena, CI y handoff antes del merge humano."
   ],
   "sdd": true,
-  "status": "pending",
-  "roadmap_note": "Corrección puntual de F-022 descubierta en smoke real tras configurar Brave."
+  "status": "claiming",
+  "roadmap_note": "Corrección puntual de F-022 descubierta en smoke real tras configurar Brave.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-030.md",
+  "branch": "feature/t-030-brave-country-fix",
+  "pr": null,
+  "depends_on": [22],
+  "allowed_modules": [
+    "docs/engineering/features/F-023.json",
+    "docs/engineering/tasks/T-030.md",
+    "src/lib/public-catalog.ts",
+    "src/lib/public-catalog.test.ts"
+  ],
+  "reviewed_by": null,
+  "evidence": []
 }
