@@ -15,7 +15,8 @@
     "features:test": "node --test scripts/features.test.mjs",
     "features:sync:test": "node --test scripts/sync-merged-features.test.mjs",
     "db:generate": "prisma generate",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "db:smoke": "node scripts/db-smoke.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

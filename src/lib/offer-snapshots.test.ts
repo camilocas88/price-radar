@@ -49,7 +49,7 @@ describe("saveOfferSnapshots", () => {
 
   it("crea o reutiliza producto y guarda un snapshot por oferta", async () => {
     const upsertProduct = vi.fn(async () => "product-1");
-    const insertSnapshots = vi.fn(async () => undefined);
+    const insertSnapshots = vi.fn(async () => 2);
     const writer: SnapshotWriter = { upsertProduct, insertSnapshots };
     const second = { ...offer, id: "ml-MCO2", price: 6000000, total: 6012000 };
     expect(await saveOfferSnapshots(query, [offer, second], writer)).toBe(2);
@@ -58,6 +58,14 @@ describe("saveOfferSnapshots", () => {
       expect.objectContaining({ offerId: "ml-MCO1", price: "5899000.00" }),
       expect.objectContaining({ offerId: "ml-MCO2", price: "6000000.00" }),
     ]);
+  });
+
+  it("informa cero inserciones cuando el escritor omite un reintento duplicado", async () => {
+    const writer: SnapshotWriter = {
+      upsertProduct: vi.fn(async () => "product-1"),
+      insertSnapshots: vi.fn(async () => 0),
+    };
+    expect(await saveOfferSnapshots(query, [offer], writer)).toBe(0);
   });
 
   it("no escribe cuando no hay ofertas", async () => {
