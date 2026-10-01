@@ -1,0 +1,24 @@
+{
+  "id": 21,
+  "name": "multi_source_links",
+  "title": "Comparación por lotes de enlaces de varias tiendas",
+  "description": "Comparar hasta seis enlaces de productos aportados por el usuario, independientes de Mercado Libre, con datos estructurados públicos y validación explícita de variante antes de señalar el precio menor.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "Un lote de enlaces HTTPS de tiendas permitidas se inspecciona de forma acotada sin depender de la búsqueda de Mercado Libre.",
+    "Los enlaces de variantes incompatibles o ambiguas no participan en el cálculo de precio menor.",
+    "La interfaz distingue datos estructurados públicos, datos completados por usuario y verificaciones pendientes.",
+    "Se añaden al menos dos dominios de tiendas reales con enlaces públicos, sin saltar bloqueos ni inventar precios."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Ampliación multi-fuente del flujo de enlaces F-008/F-020; no equivale a búsqueda web automática ni a una API comercial sin credenciales.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [8, 20],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}
