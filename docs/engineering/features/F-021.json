@@ -1,0 +1,42 @@
+{
+  "id": 21,
+  "name": "multi_source_links",
+  "title": "Comparación por lotes de enlaces de varias tiendas",
+  "description": "Comparar hasta seis enlaces de productos aportados por el usuario, independientes de Mercado Libre, con datos estructurados públicos y validación explícita de variante antes de señalar el precio menor.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "Un lote de enlaces HTTPS de tiendas permitidas se inspecciona de forma acotada sin depender de la búsqueda de Mercado Libre.",
+    "Los enlaces de variantes incompatibles o ambiguas no participan en el cálculo de precio menor.",
+    "La interfaz distingue datos estructurados públicos, datos completados por usuario y verificaciones pendientes.",
+    "Se añaden al menos dos dominios de tiendas reales con enlaces públicos, sin saltar bloqueos ni inventar precios."
+  ],
+  "sdd": true,
+  "status": "done",
+  "roadmap_note": "Ampliación multi-fuente del flujo de enlaces F-008/F-020; no equivale a búsqueda web automática ni a una API comercial sin credenciales.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-028.md",
+  "branch": "feature/t-028-multi-source-links",
+  "pr": "https://github.com/camilocas88/price-radar/pull/20",
+  "depends_on": [8, 20],
+  "allowed_modules": [
+    "docs/engineering/features/F-021.json",
+    "docs/engineering/tasks/T-028.md",
+    "src/lib/compare-link.ts",
+    "src/lib/compare-link.test.ts",
+    "src/lib/link-variants.ts",
+    "src/lib/link-variants.test.ts",
+    "src/app/components/CompareLinkSection.tsx",
+    "src/app/components/CompareLinkSection.test.ts"
+  ],
+  "reviewed_by": "Codex (agente revisor independiente review_f021)",
+  "evidence": [
+    "npm run lint — OK",
+    "npm run typecheck — OK",
+    "npm test — OK (88 pruebas)",
+    "npm run build — OK",
+    "npm run features:check — OK (21 features)",
+    "git diff --check — OK",
+    "Revisión independiente review_f021 — sin bloqueantes tras correcciones",
+    "PR #20: CI validate — 2/2 checks exitosos en 7b4957f"
+  ]
+}

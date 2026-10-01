@@ -6,12 +6,15 @@ const productHtml = `<html><script type="application/ld+json">{"@context":"https
 describe("validateCompareUrl", () => {
   it("acepta un comercio permitido y elimina el fragmento", () => {
     expect(validateCompareUrl("https://www.alkosto.com/iphone?x=1#ficha")).toEqual({ url: "https://www.alkosto.com/iphone?x=1", store: "Alkosto" });
+    expect(validateCompareUrl("https://mac-center.com/products/iphone-17").store).toBe("Mac Center");
+    expect(validateCompareUrl("https://co.tiendasishop.com/products/iphone-17").store).toBe("iShop Colombia");
   });
 
   it.each([
     "http://www.alkosto.com/iphone", "https://evil.example/", "https://www.alkosto.com.evil.example/",
     "https://user:pass@www.alkosto.com/", "https://www.alkosto.com:8080/",
     "https://127.0.0.1/", "https://localhost/", "file:///etc/passwd", "no es una URL",
+    "https://mac-center.com.evil.example/item", "https://tiendasishop.com/item",
   ])("rechaza antes del fetch: %s", (url) => {
     expect(() => validateCompareUrl(url)).toThrow();
   });
