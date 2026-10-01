@@ -1,0 +1,24 @@
+{
+  "id": 22,
+  "name": "public_catalog_search",
+  "title": "Búsqueda multi-fuente desde catálogos públicos acotados",
+  "description": "Hacer que la búsqueda por texto consulte productos públicos concretos de Éxito, Alkosto, Mac Center e iShop mediante datos estructurados, además de Mercado Libre, sin mostrar precios vencidos ni depender del permiso de esa API.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "Una respuesta 403 de Mercado Libre no impide mostrar ofertas reales y comparables de otras fuentes disponibles.",
+    "Éxito aporta ofertas desde JSON-LD Product/Offer público, con vendedor y procedencia; Alkosto usa microdatos solo si el precio está vigente.",
+    "Los precios vencidos, productos ambiguos o tiendas bloqueadas no se clasifican como ofertas actuales y su estado es visible.",
+    "El catálogo de URLs es limitado y explícito, la consulta está acotada y no se inventan precios ni se automatiza login o redirecciones."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Primer paso real de búsqueda multi-fuente sin API de descubrimiento: cobertura curada y limitada; nuevos productos requieren enlaces/feeds autorizados.",
+  "owner": null,
+  "ticket": null,
+  "branch": null,
+  "pr": null,
+  "depends_on": [5, 7, 21],
+  "allowed_modules": [],
+  "reviewed_by": null,
+  "evidence": []
+}
