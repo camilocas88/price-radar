@@ -14,7 +14,7 @@
   "roadmap_note": "Roadmap 2–3. Persistencia verificable y auditoría sobre F-016; la diversificación de fuentes se tratará en un feature separado.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-027.md",
-  "branch": "feature/t-027-offer-audit",
+  "branch": "feature/t-027-offer-audit-impl",
   "pr": null,
   "depends_on": [5],
   "allowed_modules": [
@@ -23,6 +23,8 @@
     "prisma/schema.prisma",
     "src/lib/offer-snapshots.ts",
     "src/lib/offer-snapshots.test.ts",
+    "src/lib/offer-history.ts",
+    "src/lib/offer-history.test.ts",
     "src/app/api/offer-history/route.ts",
     "src/app/api/offer-history/route.test.ts",
     "docker-compose.yml",
