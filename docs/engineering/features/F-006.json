@@ -10,14 +10,24 @@
     "La lectura actual y la histórica tienen contratos explícitos."
   ],
   "sdd": true,
-  "status": "pending",
-  "roadmap_note": "Roadmap 2–3. Depende del contrato común de ofertas.",
-  "owner": null,
-  "ticket": null,
-  "branch": null,
+  "status": "claiming",
+  "roadmap_note": "Roadmap 2–3. Persistencia verificable y auditoría sobre F-016; la diversificación de fuentes se tratará en un feature separado.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-027.md",
+  "branch": "feature/t-027-offer-audit",
   "pr": null,
   "depends_on": [5],
-  "allowed_modules": [],
+  "allowed_modules": [
+    "docs/engineering/features/F-006.json",
+    "docs/engineering/tasks/T-027.md",
+    "prisma/schema.prisma",
+    "src/lib/offer-snapshots.ts",
+    "src/lib/offer-snapshots.test.ts",
+    "src/app/api/offer-history/route.ts",
+    "src/app/api/offer-history/route.test.ts",
+    "docker-compose.yml",
+    "README.md"
+  ],
   "reviewed_by": null,
   "evidence": []
 }
