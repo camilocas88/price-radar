@@ -10,7 +10,7 @@
     "La lectura actual y la histórica tienen contratos explícitos."
   ],
   "sdd": true,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Roadmap 2–3. Persistencia verificable y auditoría sobre F-016; la diversificación de fuentes se tratará en un feature separado.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-027.md",
@@ -32,7 +32,7 @@
     "scripts/db-smoke.mjs",
     "README.md"
   ],
-  "reviewed_by": null,
+  "reviewed_by": "Codex (agente revisor independiente review_f006)",
   "evidence": [
     "npm run lint — OK",
     "npm run typecheck — OK",
@@ -40,6 +40,8 @@
     "npm run build — OK",
     "npm run features:check — OK (20 features)",
     "npm run db:smoke — OK contra PostgreSQL local; reintento deduplicado y captura posterior conservada",
-    "git diff --check — OK"
+    "git diff --check — OK",
+    "Revisión independiente review_f006 — sin bloqueantes",
+    "PR #19: CI validate — 2/2 checks exitosos en 016aa7b"
   ]
 }
