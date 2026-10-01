@@ -16,7 +16,19 @@ export type CatalogSearch = {
 
 const MAX_RESULTS = 10;
 const MAX_PAGES = 8;
-const SEARCHES = ["site:exito.com", "site:falabella.com.co", ""];
+const SEARCHES = ["site:exito.com", "site:falabella.com.co/falabella-co/product", ""];
+
+function isProductPage(url: string): boolean {
+  const parsed = new URL(url);
+  const host = parsed.hostname.replace(/^www\./, "");
+  const path = parsed.pathname;
+  if (host === "exito.com") return /\/p\/?$/i.test(path);
+  if (host === "falabella.com.co") return /\/product\//i.test(path);
+  if (host === "alkosto.com" || host === "ktronix.com") return /\/p(?:\/|$)/i.test(path);
+  if (host === "mac-center.com" || host === "co.tiendasishop.com") return /\/products\//i.test(path);
+  if (host === "mercadolibre.com.co") return /\/p\/|\/MCO-/i.test(path);
+  return false;
+}
 
 function words(value: string): string[] {
   return value.toLocaleLowerCase("es-CO").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -42,7 +54,6 @@ export async function searchPublicCatalog(query: string, options: {
   const searches = await Promise.all(SEARCHES.map(async (site): Promise<SearchResult[] | null> => {
     const endpoint = new URL("https://api.search.brave.com/res/v1/web/search");
     endpoint.searchParams.set("q", `${query} comprar precio Colombia ${site}`.trim());
-    endpoint.searchParams.set("country", "CO");
     endpoint.searchParams.set("search_lang", "es");
     endpoint.searchParams.set("count", String(MAX_RESULTS));
     try {
@@ -69,6 +80,7 @@ export async function searchPublicCatalog(query: string, options: {
       if (typeof result.url !== "string") continue;
       try {
         const validated = validateCompareUrl(result.url);
+        if (!isProductPage(validated.url)) continue;
         if (!urls.has(validated.url)) {
           urls.set(validated.url, { store: validated.store, title: typeof result.title === "string" ? result.title : undefined });
           fromSearch += 1;
@@ -76,7 +88,7 @@ export async function searchPublicCatalog(query: string, options: {
       } catch {
         // Only explicitly supported retailer hosts can be fetched.
       }
-      if (urls.size >= MAX_PAGES || fromSearch >= (index === 2 ? 4 : 2)) break;
+      if (urls.size >= MAX_PAGES || fromSearch >= (index === 0 ? 4 : 2)) break;
     }
     if (urls.size >= MAX_PAGES) break;
   }

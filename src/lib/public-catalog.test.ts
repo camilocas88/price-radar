@@ -19,6 +19,43 @@ describe("public catalog discovery", () => {
     expect(fetchImpl).not.toHaveBeenCalled();
   });
 
+  it("omits Brave's unsupported country=CO while keeping Colombian search intent", async () => {
+    const searched: URL[] = [];
+    const fetchImpl = vi.fn(async (input: string | URL | Request) => {
+      searched.push(new URL(String(input)));
+      return Response.json({ web: { results: [] } });
+    });
+    await searchPublicCatalog("carpas", { key: "test", fetchImpl });
+    expect(searched).toHaveLength(3);
+    for (const url of searched) {
+      expect(url.searchParams.has("country")).toBe(false);
+      expect(url.searchParams.get("search_lang")).toBe("es");
+      expect(url.searchParams.get("q")).toContain("carpas comprar precio Colombia");
+    }
+  });
+
+  it("skips category pages so they do not consume the retailer product slots", async () => {
+    const inspected: string[] = [];
+    const fetchImpl = vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+      if (url.startsWith("https://api.search.brave.com/")) return Response.json({ web: { results: [
+        { url: "https://www.exito.com/t/carpas" },
+        { url: "https://www.exito.com/jardin-y-aire-libre/camping/carpas" },
+        { url: "https://www.exito.com/carpa-familiar/p" },
+        { url: "https://www.falabella.com.co/falabella-co/category/cat670983/Carpas" },
+        { url: "https://www.falabella.com.co/falabella-co/product/123/Carpa-Familiar/123" },
+      ] } });
+      inspected.push(url);
+      return page("Carpa familiar", "120000");
+    });
+    const result = await searchPublicCatalog("carpas", { key: "test", fetchImpl });
+    expect(result.offers).toHaveLength(2);
+    expect(inspected).toEqual([
+      "https://www.exito.com/carpa-familiar/p",
+      "https://www.falabella.com.co/falabella-co/product/123/Carpa-Familiar/123",
+    ]);
+  });
+
   it("discovers and reads prices for carpas from two stores", async () => {
     const fetchImpl = vi.fn(async (input: string | URL | Request) => {
       const url = String(input);
