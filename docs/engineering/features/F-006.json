@@ -10,13 +10,15 @@
     "La lectura actual y la histórica tienen contratos explícitos."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Roadmap 2–3. Persistencia verificable y auditoría sobre F-016; la diversificación de fuentes se tratará en un feature separado.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-027.md",
   "branch": "feature/t-027-offer-audit-impl",
   "pr": "https://github.com/camilocas88/price-radar/pull/19",
-  "depends_on": [5],
+  "depends_on": [
+    5
+  ],
   "allowed_modules": [
     "docs/engineering/features/F-006.json",
     "docs/engineering/tasks/T-027.md",
@@ -42,6 +44,7 @@
     "npm run db:smoke — OK contra PostgreSQL local; reintento deduplicado y captura posterior conservada",
     "git diff --check — OK",
     "Revisión independiente review_f006 — sin bloqueantes",
-    "PR #19: CI validate — 2/2 checks exitosos en 016aa7b"
+    "PR #19: CI validate — 2/2 checks exitosos en 016aa7b",
+    "PR #19 fusionada a main el 2026-10-01T01:20:14Z; merge commit 3b033b490f629e3d31407aff3fded45d4d9f1420."
   ]
 }
