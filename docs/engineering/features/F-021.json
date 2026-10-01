@@ -11,7 +11,7 @@
     "Se añaden al menos dos dominios de tiendas reales con enlaces públicos, sin saltar bloqueos ni inventar precios."
   ],
   "sdd": true,
-  "status": "in_review",
+  "status": "done",
   "roadmap_note": "Ampliación multi-fuente del flujo de enlaces F-008/F-020; no equivale a búsqueda web automática ni a una API comercial sin credenciales.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-028.md",
@@ -36,6 +36,7 @@
     "npm run build — OK",
     "npm run features:check — OK (21 features)",
     "git diff --check — OK",
-    "Revisión independiente review_f021 — sin bloqueantes tras correcciones"
+    "Revisión independiente review_f021 — sin bloqueantes tras correcciones",
+    "PR #20: CI validate — 2/2 checks exitosos en 7b4957f"
   ]
 }
