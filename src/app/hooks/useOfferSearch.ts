@@ -9,7 +9,9 @@ import { normalizeLinkInput } from "../../lib/link-input";
 export type SearchStatus = "demo" | "loading" | "success" | "unavailable" | "link";
 
 export type ReviewItem = { id: string; title: string; reasons: string[] };
-type SearchPayload = { offers?: Offer[]; needsReview?: ReviewItem[]; excludedCount?: number; error?: string; code?: string };
+export type SourceState = { source: string; status: string; detail: string };
+export type UnpricedLink = { url: string; store: string };
+type SearchPayload = { offers?: Offer[]; unpriced?: UnpricedLink[]; needsReview?: ReviewItem[]; excludedCount?: number; sources?: SourceState[]; error?: string; code?: string };
 
 export type OfferSearchState = {
   query: string;
@@ -20,6 +22,8 @@ export type OfferSearchState = {
   needsReview: ReviewItem[];
   excludedCount: number;
   error: string;
+  sources: SourceState[];
+  unpriced: UnpricedLink[];
   linkRequest: { url: string; id: number } | null;
   onlyVerified: boolean;
   watching: boolean;
@@ -53,6 +57,8 @@ export function useOfferSearch(): OfferSearchState {
   const [needsReview, setNeedsReview] = useState<ReviewItem[]>([]);
   const [excludedCount, setExcludedCount] = useState(0);
   const [error, setError] = useState("");
+  const [sources, setSources] = useState<SourceState[]>([]);
+  const [unpriced, setUnpriced] = useState<UnpricedLink[]>([]);
   const [linkRequest, setLinkRequest] = useState<{ url: string; id: number } | null>(initialLink ? { url: initialLink, id: 0 } : null);
   const [onlyVerified, setOnlyVerified] = useState(false);
   const [watching, setWatching] = useState(false);
@@ -74,6 +80,8 @@ export function useOfferSearch(): OfferSearchState {
     setExcludedCount(0);
     setWatching(false);
     setError("");
+    setSources([]);
+    setUnpriced([]);
     setLinkRequest({ url, id: ++linkSequence.current });
   }, []);
 
@@ -91,18 +99,22 @@ export function useOfferSearch(): OfferSearchState {
     setExcludedCount(0);
     setWatching(false);
     setError("");
+    setSources([]);
+    setUnpriced([]);
     try {
       const response = await fetch(`/api/offers?query=${encodeURIComponent(term)}`);
       const data = (await response.json()) as SearchPayload;
-      if (!response.ok) throw new Error(data.error ?? "No fue posible consultar Mercado Libre.");
       if (sequence !== requestSequence.current) return;
+      setSources(data.sources ?? []);
+      if (!response.ok) throw new Error(data.error ?? "No fue posible consultar las fuentes.");
       setOffers(data.offers ?? []);
+      setUnpriced(data.unpriced ?? []);
       setNeedsReview(data.needsReview ?? []);
       setExcludedCount(data.excludedCount ?? 0);
       setStatus("success");
     } catch (reason) {
       if (sequence !== requestSequence.current) return;
-      setError(reason instanceof Error ? reason.message : "No fue posible consultar Mercado Libre.");
+      setError(reason instanceof Error ? reason.message : "No fue posible consultar las fuentes.");
       setStatus("unavailable");
     }
   }, []);
@@ -119,6 +131,8 @@ export function useOfferSearch(): OfferSearchState {
     setExcludedCount(0);
     setStatus("demo");
     setError("");
+    setSources([]);
+    setUnpriced([]);
   }, []);
 
   useEffect(() => {
@@ -167,6 +181,8 @@ export function useOfferSearch(): OfferSearchState {
     needsReview,
     excludedCount,
     error,
+    sources,
+    unpriced,
     linkRequest,
     onlyVerified,
     watching,

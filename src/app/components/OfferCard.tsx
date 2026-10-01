@@ -8,6 +8,7 @@ type OfferCardProps = {
 };
 
 export function OfferCard({ offer, highlighted }: OfferCardProps) {
+  const isWebOffer = "source" in offer && typeof offer.source === "string" && offer.source !== "mercadolibre";
   return (
     <article className={`rounded-2xl border bg-white p-5 ${highlighted ? "border-[#86c69b] ring-1 ring-[#d6f0dc]" : "border-[#dbe6de]"}`}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -25,9 +26,9 @@ export function OfferCard({ offer, highlighted }: OfferCardProps) {
           </div>
         </div>
         <div className="sm:text-right">
-          <p className="text-xl font-semibold">{formatCop(offer.total)}</p>
+          <p className="text-xl font-semibold">{formatCop(isWebOffer ? offer.price : offer.total)}</p>
           <p className="mt-1 text-xs text-[#62786c]">
-            Precio publicado {offer.estimated ? "con datos pendientes" : "con envío confirmado"}
+            {offer.estimated ? "Precio del producto; envío y cargos por confirmar" : "Precio con envío confirmado"}
           </p>
           <div className="mt-3 flex items-center gap-2 sm:justify-end">
             <span className="inline-flex gap-1 text-xs font-semibold text-[#197243]">
@@ -47,8 +48,8 @@ export function OfferCard({ offer, highlighted }: OfferCardProps) {
       </div>
       <div className="mt-4 grid grid-cols-2 gap-2 border-t border-[#e7eee9] pt-3 text-xs text-[#60766a] sm:grid-cols-4">
         <span>Producto: {formatCop(offer.price)}</span>
-        <span>Envío: {formatCop(offer.shipping)}</span>
-        <span>Impuestos: {formatCop(offer.taxes)}</span>
+        <span>Envío: {isWebOffer ? "por confirmar" : formatCop(offer.shipping)}</span>
+        <span>Impuestos: {isWebOffer ? "por confirmar" : formatCop(offer.taxes)}</span>
         <span>{offer.estimated ? "Incluye datos por confirmar" : "Datos confirmados"}</span>
       </div>
     </article>

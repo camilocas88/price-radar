@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { extractProductJsonLd, inspectCompareLink, validateCompareUrl } from "./compare-link";
+import { extractCatalogOffersJsonLd, extractProductJsonLd, inspectCompareLink, validateCompareUrl } from "./compare-link";
 
 const productHtml = `<html><script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"iPhone 17 Pro Max 256 GB","offers":{"@type":"Offer","price":"5899000","priceCurrency":"COP"}}</script></html>`;
 
@@ -21,6 +21,19 @@ describe("validateCompareUrl", () => {
 });
 
 describe("JSON-LD Product", () => {
+  it("conserva vendedores de múltiples ofertas vigentes y excluye precios vencidos", () => {
+    const html = '<script type="application/ld+json">{"@type":"Product","name":"Carpa camping 4 personas","offers":[{"price":"120000","priceCurrency":"COP","priceValidUntil":"","seller":{"name":"Vendedor A"}},{"price":"110000","priceCurrency":"COP","availability":"https://schema.org/InStock","seller":{"name":"Vendedor B"}},{"price":"99000","priceCurrency":"COP","seller":{"name":"Vendedor C"},"priceValidUntil":"2020-01-01"},{"price":0,"priceCurrency":"COP","availability":"https://schema.org/OutOfStock"},{"price":"80","priceCurrency":"USD"}]}</script>';
+    expect(extractCatalogOffersJsonLd(html, new Date("2026-09-30"))).toEqual([
+      { title: "Carpa camping 4 personas", price: 120000, seller: "Vendedor A" },
+      { title: "Carpa camping 4 personas", price: 110000, seller: "Vendedor B" },
+    ]);
+  });
+
+  it("continúa al siguiente bloque Product si el primero no publica precio vigente", () => {
+    const html = '<script type="application/ld+json">{"@type":"Product","name":"Carpa sin precio"}</script>'
+      + '<script type="application/ld+json">{"@type":"Product","name":"Carpa familiar","offers":{"price":99000,"priceCurrency":"COP"}}</script>';
+    expect(extractCatalogOffersJsonLd(html)).toEqual([{ title: "Carpa familiar", price: 99000 }]);
+  });
   it("extrae solo precio COP de un Product único", () => {
     expect(extractProductJsonLd(productHtml)).toEqual({ title: "iPhone 17 Pro Max 256 GB", price: 5899000 });
     expect(extractProductJsonLd(productHtml.replace('"COP"', '"USD"'))).toEqual({ title: "iPhone 17 Pro Max 256 GB" });

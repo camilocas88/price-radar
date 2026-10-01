@@ -33,6 +33,17 @@ describe("ResultsSection", () => {
     const excluded = renderToStaticMarkup(createElement(ResultsSection, { ...props, excludedCount: 2 }));
     expect(excluded).toContain("variantes distintas");
     const empty = renderToStaticMarkup(createElement(ResultsSection, props));
-    expect(empty).toContain("No encontramos ofertas comparables");
+    expect(empty).toContain("No encontramos productos con precio verificado");
+  });
+
+  it("muestra páginas descubiertas sin presentarlas como ofertas con precio", () => {
+    const html = renderToStaticMarkup(createElement(ResultsSection, {
+      ...props,
+      sources: [{ source: "web", status: "no_prices", detail: "Sin precio" }],
+      unpriced: [{ store: "Éxito", url: "https://www.exito.com/carpa/p" }],
+    }));
+    expect(html).toContain("Páginas encontradas sin precio verificado");
+    expect(html).toContain("https://www.exito.com/carpa/p");
+    expect(html).toContain("no se pudo verificar un precio vigente");
   });
 });
