@@ -1,0 +1,16 @@
+{
+  "id": 23,
+  "name": "brave_search_country_compatibility",
+  "title": "Corregir búsqueda Brave con región no admitida",
+  "description": "Brave rechaza con HTTP 422 el parámetro country=CO; retirar ese parámetro y verificar una búsqueda real de carpas sin exponer la clave.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "La petición Brave no envía country=CO; conserva el término Colombia y search_lang=es.",
+    "Una prueba de contrato detecta la regresión del parámetro inválido.",
+    "La búsqueda real de carpas responde y muestra el estado de tiendas y precios sin revelar la clave.",
+    "Gates, revisión ajena, CI y handoff antes del merge humano."
+  ],
+  "sdd": true,
+  "status": "pending",
+  "roadmap_note": "Corrección puntual de F-022 descubierta en smoke real tras configurar Brave."
+}
