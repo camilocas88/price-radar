@@ -12,13 +12,17 @@
     "Sin clave de búsqueda web se informa la configuración faltante y no se presentan demos como resultados reales; URLs y lecturas están acotadas por allowlist, tiempo y bytes."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Descubrimiento con Brave Search API configurable; requiere clave del propietario. El precio publicado no incluye envío o impuestos no informados.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-029.md",
   "branch": "feature/t-029-public-catalog-search",
   "pr": "https://github.com/camilocas88/price-radar/pull/21",
-  "depends_on": [5, 7, 21],
+  "depends_on": [
+    5,
+    7,
+    21
+  ],
   "allowed_modules": [
     "docs/engineering/features/F-022.json",
     "docs/engineering/tasks/T-029.md",
@@ -45,6 +49,7 @@
     "npm run build — OK",
     "npm run features:check — OK (22 features)",
     "Revisión independiente review_f022 — tres hallazgos corregidos y segunda revisión sin bloqueantes",
-    "Búsqueda carpas con clave Brave real — pendiente de clave del propietario; no se afirma verificación en vivo"
+    "Búsqueda carpas con clave Brave real — pendiente de clave del propietario; no se afirma verificación en vivo",
+    "PR #21 fusionada a main el 2026-10-01T01:22:36Z; merge commit 10f01bf63c07a201a346a02e0a982da70f529010."
   ]
 }
