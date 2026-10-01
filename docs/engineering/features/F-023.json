@@ -1,0 +1,38 @@
+{
+  "id": 23,
+  "name": "brave_search_country_compatibility",
+  "title": "Corregir búsqueda Brave con región no admitida",
+  "description": "Brave rechaza con HTTP 422 el parámetro country=CO; retirar ese parámetro y verificar una búsqueda real de carpas sin exponer la clave.",
+  "plan": "README.md#roadmap",
+  "acceptance": [
+    "La petición Brave no envía country=CO; conserva el término Colombia y search_lang=es.",
+    "Una prueba de contrato detecta la regresión del parámetro inválido y las páginas de categoría no desplazan a productos.",
+    "La búsqueda real de carpas responde y muestra al menos un precio publicado sin revelar la clave.",
+    "Gates, revisión ajena, CI y handoff antes del merge humano."
+  ],
+  "sdd": true,
+  "status": "done",
+  "roadmap_note": "Corrección puntual de F-022 descubierta en smoke real tras configurar Brave.",
+  "owner": "Codex",
+  "ticket": "docs/engineering/tasks/T-030.md",
+  "branch": "feature/t-030-brave-country-fix",
+  "pr": "https://github.com/camilocas88/price-radar/pull/22",
+  "depends_on": [22],
+  "allowed_modules": [
+    "docs/engineering/features/F-023.json",
+    "docs/engineering/tasks/T-030.md",
+    "src/lib/public-catalog.ts",
+    "src/lib/public-catalog.test.ts"
+  ],
+  "reviewed_by": "Codex (agente revisor independiente review_f023)",
+  "evidence": [
+    "Brave live smoke: country=CO HTTP 422 VALIDATION; sin country HTTP 200 con páginas de Éxito",
+    "App live smoke carpas: HTTP 200, oferta Éxito COP 219900, 4 enlaces sin precio verificado; Mercado Libre HTTP 403",
+    "npm run lint — OK",
+    "npm run typecheck — OK",
+    "npm test — OK (105 pruebas)",
+    "npm run build — OK",
+    "npm run features:check — OK (23 features)",
+    "Revisión independiente review_f023 — sin bloqueantes; AGENTS.md generado por next dev excluido del diff"
+  ]
+}
