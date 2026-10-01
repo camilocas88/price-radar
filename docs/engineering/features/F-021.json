@@ -11,13 +11,16 @@
     "Se añaden al menos dos dominios de tiendas reales con enlaces públicos, sin saltar bloqueos ni inventar precios."
   ],
   "sdd": true,
-  "status": "done",
+  "status": "merged",
   "roadmap_note": "Ampliación multi-fuente del flujo de enlaces F-008/F-020; no equivale a búsqueda web automática ni a una API comercial sin credenciales.",
   "owner": "Codex",
   "ticket": "docs/engineering/tasks/T-028.md",
   "branch": "feature/t-028-multi-source-links",
   "pr": "https://github.com/camilocas88/price-radar/pull/20",
-  "depends_on": [8, 20],
+  "depends_on": [
+    8,
+    20
+  ],
   "allowed_modules": [
     "docs/engineering/features/F-021.json",
     "docs/engineering/tasks/T-028.md",
@@ -37,6 +40,7 @@
     "npm run features:check — OK (21 features)",
     "git diff --check — OK",
     "Revisión independiente review_f021 — sin bloqueantes tras correcciones",
-    "PR #20: CI validate — 2/2 checks exitosos en 7b4957f"
+    "PR #20: CI validate — 2/2 checks exitosos en 7b4957f",
+    "PR #20 fusionada a main el 2026-10-01T00:40:56Z; merge commit a526a6a46d70d407e493db095cbfc57354efbd7c."
   ]
 }
